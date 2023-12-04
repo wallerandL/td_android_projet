@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "com.Groupe4.td_android_projet"
-    compileSdk = 33
+    compileSdkVersion(rootProject.extra["compileSdkVersion"] as Int)
 
     defaultConfig {
         applicationId = "com.Groupe4.td_android_projet"
