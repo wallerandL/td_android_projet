@@ -5,6 +5,8 @@ import android.graphics.PointF;
 import com.Groupe4.td_android_projet.entites.Character;
 import com.Groupe4.td_android_projet.entites.GameSheet;
 import com.Groupe4.td_android_projet.helpers.GameConstants;
+import static com.Groupe4.td_android_projet.MainActivity.GAME_HEIGHT;
+import static com.Groupe4.td_android_projet.MainActivity.GAME_WIDTH;
 
 import java.util.Random;
 
@@ -16,7 +18,7 @@ public class Skeleton extends Character {
         super(pos, GameSheet.SKELETON);
     }
 
-    public void update(double delta){
+    public   void update(double delta){
 
         updateMove(delta);
         updateAnimation();
@@ -26,7 +28,7 @@ public class Skeleton extends Character {
     private void updateMove(double delta) {
         if (System.currentTimeMillis()-lastDirChange >= 3000){
             faceDir = rand.nextInt(4);
-                lastDirChange = System.currentTimeMillis();
+            lastDirChange = System.currentTimeMillis();
         }
 
         switch (faceDir){
@@ -36,7 +38,7 @@ public class Skeleton extends Character {
                     faceDir = GameConstants.Face_Dir.UP;
                 break;
 
-            case GameConstants.Face_Dir.DOWN:
+            case GameConstants.Face_Dir.UP:
                 hitbox.top -= delta * 300;
                 if (hitbox.top <= 0)
                     faceDir = GameConstants.Face_Dir.DOWN;

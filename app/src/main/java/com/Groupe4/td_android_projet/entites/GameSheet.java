@@ -15,13 +15,15 @@ import com.Groupe4.td_android_projet.R;
 import java.io.File;
 import java.util.ArrayList;
 
-public enum GameSheet implements BitmapMethods {;
+public enum GameSheet implements BitmapMethods {
 
-
+    //PLAYER,
+    SKELETON(R.drawable.td_tuto),
+    ORC(R.drawable.td_tuto);
     private Bitmap spriteSheet;
     private Bitmap[][] sprites=new Bitmap[10][10];
     private BitmapFactory.Options options = new BitmapFactory.Options();
-    SKELETON(sprites[1][1]);
+
     GameSheet(int resID) {
         options.inScaled = false;
         spriteSheet = BitmapFactory.decodeResource(MainActivity.getGameContext().getResources(), resID, options);
