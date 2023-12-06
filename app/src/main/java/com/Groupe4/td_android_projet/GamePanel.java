@@ -1,8 +1,8 @@
 package com.Groupe4.td_android_projet;
 
 import  static com.Groupe4.td_android_projet.helpers.GameConstants.Sprite.DEFAULT_SIZE;
-import static com.Groupe4.td_android_projet.helpers.GameConstants.Sprite.DEFAULT_SIZE;
-
+import static com.Groupe4.td_android_projet.MainActivity.GAME_WIDTH;
+import static com.Groupe4.td_android_projet.MainActivity.GAME_HEIGHT;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -15,6 +15,9 @@ import android.view.SurfaceView;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Random;
+
+import com.Groupe4.td_android_projet.entites.enemies.Skeleton;
 import com.Groupe4.td_android_projet.environement.GameMap;
 import com.Groupe4.td_android_projet.entites.GameSheet;
 import com.Groupe4.td_android_projet.helpers.GameConstants;
@@ -22,10 +25,14 @@ import com.Groupe4.td_android_projet.helpers.GameConstants;
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     private Paint redPaint = new Paint();
+
+    private Random rand = new Random();
     private Paint yellowPaint = new Paint();
+    private boolean movePlayer;
     private SurfaceHolder holder;
     private float x,y;
     private ArrayList<PointF> sqarePos = new ArrayList<>() ;
+    private ArrayList<Skeleton> orc;
 
     private GameLoop gameLoop;
     private GameMap testMap;
@@ -35,8 +42,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         holder.addCallback(this);
         yellowPaint.setColor(Color.rgb(255,140,0));
         redPaint.setColor(Color.RED);
-
+        orc = new ArrayList<>();
         gameLoop = new GameLoop(this);
+
+   //     orc = new PointF(rand.nextInt(GAME_WIDTH), rand.nextInt(GAME_HEIGHT));
 
         int[][] spriteIds = {
                 {18, 18, 18, 18,18,18,18,18,18,18,18,18,18,18},
@@ -48,7 +57,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 {60, 60, 60, 60,60, 60, 60,60, 60, 60,60, 60, 60,60},
 
         };
-
+        for (int i=0;i<2;i++)
+            orc.add(new Skeleton(new PointF(100,100)));
         testMap = new GameMap(spriteIds);
     }
 
@@ -82,15 +92,24 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         for (PointF pos : sqarePos)
             c.drawRect(pos.x, pos.y, pos.x+ DEFAULT_SIZE, pos.y+DEFAULT_SIZE, redPaint);
+        c.drawBitmap(GameSheet.SKELETON.getSpriteSheet(),500,500,null);
+       // for (PointF pos: orc)
+            c.drawBitmap(GameSheet.ORC.getSprite(9,1),x,    y,null);
+
         holder.unlockCanvasAndPost(c);
     }
+    public void update(double delta){
+        for (Skeleton skeleton : orc)
+            skeleton.update(delta);
+        }
 
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN){
-            sqarePos.add(new PointF(event.getX(),event.getY()));
-
+            //sqarePos.add(new PointF(event.getX(),event.getY()));
+            x=event.getX();
+            y=event.getY();
             render();
 
         }

@@ -15,15 +15,15 @@ import com.Groupe4.td_android_projet.R;
 import java.io.File;
 import java.util.ArrayList;
 
-public enum GameSheet implements BitmapMethods{
-  /*  MAP(R.drawable.td_tuto);
-    GRASS(R.drawable.td_tuto),
-    WATER(R.drawable.td_tuto),
-    ROAD(R.drawable.td_tuto);*/;
+public enum GameSheet implements BitmapMethods {
 
+    //PLAYER,
+    SKELETON(R.drawable.td_tuto),
+    ORC(R.drawable.td_tuto);
     private Bitmap spriteSheet;
     private Bitmap[][] sprites=new Bitmap[10][10];
     private BitmapFactory.Options options = new BitmapFactory.Options();
+
     GameSheet(int resID) {
         options.inScaled = false;
         spriteSheet = BitmapFactory.decodeResource(MainActivity.getGameContext().getResources(), resID, options);
