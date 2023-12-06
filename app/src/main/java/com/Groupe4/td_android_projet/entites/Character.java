@@ -4,7 +4,7 @@ import android.graphics.PointF;
 
 import com.Groupe4.td_android_projet.helpers.GameConstants;
 
-public class Character extends Entity{
+public abstract class Character extends Entity{
     protected int aniTick, aniIndex;
     protected int faceDir = GameConstants.Face_Dir.DOWN;
     protected final GameSheet gameSheetType;
