@@ -18,7 +18,7 @@ public class Skeleton extends Character {
         super(pos, GameSheet.SKELETON);
     }
 
-    public   void update(double delta){
+    public void update(double delta){
 
         updateMove(delta);
         updateAnimation();

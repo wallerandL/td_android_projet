@@ -15,14 +15,13 @@ public abstract class Character extends Entity{
 
     protected void updateAnimation(){
         aniTick++;
-        if (aniTick >= GameConstants.Animation.speed) {
+        if (aniTick >= GameConstants.Animation.SPEED) {
             aniTick = 0;
             aniIndex++;
             if (aniIndex >= GameConstants.Animation.AMOUNT)
                 aniIndex = 0;
         }
     }
-
 
     public void resetAnimation() {
         aniTick = 0;

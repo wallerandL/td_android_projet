@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.Groupe4.td_android_projet.entites.Character;
 import com.Groupe4.td_android_projet.entites.enemies.Skeleton;
 import com.Groupe4.td_android_projet.environement.GameMap;
 import com.Groupe4.td_android_projet.entites.GameSheet;
@@ -32,20 +33,21 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private SurfaceHolder holder;
     private float x,y;
     private ArrayList<PointF> sqarePos = new ArrayList<>() ;
-    private ArrayList<Skeleton> orc;
 
     private GameLoop gameLoop;
     private GameMap testMap;
+    private Skeleton skeleton;
+
+    private ArrayList<Skeleton> skeletons;
     public GamePanel(Context context) {
         super(context);
+        skeletons = new ArrayList<>();
         holder = getHolder();
         holder.addCallback(this);
         yellowPaint.setColor(Color.rgb(255,140,0));
         redPaint.setColor(Color.RED);
-        orc = new ArrayList<>();
         gameLoop = new GameLoop(this);
-
-   //     orc = new PointF(rand.nextInt(GAME_WIDTH), rand.nextInt(GAME_HEIGHT));
+        skeleton = new Skeleton(new PointF(100,100));
 
         int[][] spriteIds = {
 
@@ -59,9 +61,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
 
         };
-
-        for (int i=0;i<2;i++)
-            orc.add(new Skeleton(new PointF(100,100)));
         testMap = new GameMap(spriteIds);
     }
 
@@ -93,18 +92,26 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         c.drawRect(stripeLeft,stripeTop, stripeRight, stripeBottom, yellowPaint);
 
 
-        for (PointF pos : sqarePos)
-            c.drawRect(pos.x, pos.y, pos.x+ DEFAULT_SIZE, pos.y+DEFAULT_SIZE, redPaint);
+//        for (PointF pos : sqarePos)
+//            c.drawRect(pos.x, pos.y, pos.x+ DEFAULT_SIZE, pos.y+DEFAULT_SIZE, redPaint);
        // c.drawBitmap(GameSheet.SKELETON.getSpriteSheet(),500,500,null);
-        c.drawBitmap(GameSheet.SKELETON.getSprite(0,0),100,100,null);
-       // for (PointF pos: orc)
-            c.drawBitmap(GameSheet.ORC.getSprite(0,0),x,    y,null);
-
+ //       c.drawBitmap(GameSheet.SKELETON.getSprite(0,0),100,100,null);
+        drawCharacter(c,skeleton);
         holder.unlockCanvasAndPost(c);
     }
+
+
+
+    public void drawCharacter(Canvas canvas, Character c){
+        canvas.drawBitmap(c.getGameSheetType().getSprite(c.getFaceDir(),c.getAniIndex()), c.getHitbox().left,c.getHitbox().top,null);
+
+    }
+
     public void update(double delta){
-        for (Skeleton skeleton : orc)
+        skeleton.update(delta);
+        for (Skeleton skeleton : skeletons)
             skeleton.update(delta);
+
         }
 
 
