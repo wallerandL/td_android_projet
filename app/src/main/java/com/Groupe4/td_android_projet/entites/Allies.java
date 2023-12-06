@@ -6,7 +6,7 @@ import android.graphics.PointF;
 // correspond à "Player" dans le tuto, probablement faire un héritage pour
 public class Allies extends Character{
     public Allies(PointF pos, GameSheet gameSheetType) {
-        super(pos, gameSheetType);
+        super(pos, GameSheet.PLAYER);
     }
 
     public void update(double delta, boolean ennemyInRange)

@@ -15,6 +15,8 @@ import android.view.SurfaceView;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+
+import com.Groupe4.td_android_projet.entites.Allies;
 import com.Groupe4.td_android_projet.environement.GameMap;
 import com.Groupe4.td_android_projet.entites.GameSheet;
 import com.Groupe4.td_android_projet.helpers.GameConstants;
@@ -35,7 +37,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         holder.addCallback(this);
         yellowPaint.setColor(Color.rgb(255,140,0));
         redPaint.setColor(Color.RED);
-
+        Allies allies = new Allies(pos);
         gameLoop = new GameLoop(this);
 
         int[][] spriteIds = {
@@ -79,10 +81,19 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         c.drawRect(stripeLeft,stripeTop, stripeRight, stripeBottom, yellowPaint);
 
+        drawTower(c);
 
         for (PointF pos : sqarePos)
             c.drawRect(pos.x, pos.y, pos.x+ DEFAULT_SIZE, pos.y+DEFAULT_SIZE, redPaint);
         holder.unlockCanvasAndPost(c);
+    }
+
+    private void drawTower(Canvas c) {
+        c.drawBitmap(
+                allies.getGameCharType.getSprite(allies.getAniIndex(), allies.getFaceDir()),
+                allies.getHitbox().left,allies.getHitbox().top, null);
+
+
     }
 
 
