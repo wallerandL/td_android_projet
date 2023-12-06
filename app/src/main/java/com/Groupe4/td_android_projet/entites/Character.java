@@ -18,12 +18,16 @@ public abstract class Character extends Entity{
         if (aniTick >= GameConstants.Animation.speed) {
             aniTick = 0;
             aniIndex++;
-            if (GameConstants.Animation.AMOUNT >= 4)
+            if (aniIndex >= GameConstants.Animation.AMOUNT)
                 aniIndex = 0;
         }
     }
 
 
+    public void resetAnimation() {
+        aniTick = 0;
+        aniIndex = 0;
+    }
     public int getAniIndex() {
         return aniIndex;
     }
