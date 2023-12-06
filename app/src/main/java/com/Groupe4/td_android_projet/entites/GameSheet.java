@@ -18,10 +18,10 @@ import java.util.ArrayList;
 public enum GameSheet implements BitmapMethods {
 
     //PLAYER,
-    SKELETON(R.drawable.td_tuto),
-    ORC(R.drawable.td_tuto);
+    SKELETON(R.drawable.skeleton_spritesheet),
+    ORC(R.drawable.player_spritesheet);
     private Bitmap spriteSheet;
-    private Bitmap[][] sprites=new Bitmap[10][10];
+    private Bitmap[][] sprites=new Bitmap[4][7];
     private BitmapFactory.Options options = new BitmapFactory.Options();
 
     GameSheet(int resID) {
