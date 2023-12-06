@@ -48,15 +48,18 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
    //     orc = new PointF(rand.nextInt(GAME_WIDTH), rand.nextInt(GAME_HEIGHT));
 
         int[][] spriteIds = {
-                {18, 18, 18, 18,18,18,18,18,18,18,18,18,18,18},
-                {18, 18, 18, 18,18,18,18,18,18,18,18,18,18,18},
-                {18, 18, 18, 18,18,18,18,18,18,18,18,18,18,18},
-                {9, 9,9, 9,9, 9,9, 9,9, 9,9, 9,9, 9,9},
-                {60, 60, 60, 60,60, 60, 60,60, 60, 60,60, 60, 60,60},
-                {60, 60, 60, 60,60, 60, 60,60, 60, 60,60, 60, 60,60},
-                {60, 60, 60, 60,60, 60, 60,60, 60, 60,60, 60, 60,60},
+
+                {454, 276, 275, 275, 275, 275, 275, 279, 275, 275, 190, 297, 110},
+                {454, 275, 275, 275, 169, 232, 232, 232, 232, 232, 238, 297, 110},
+                {454, 275, 275, 276, 190, 275, 279, 275, 275, 275, 279, 297, 110},
+                {454, 275, 275, 279, 190, 275, 275, 275, 275, 275, 275, 297, 110},
+                {454, 275, 275, 276, 190, 275, 275, 279, 279, 279, 275, 297, 110},
+                {232, 232, 232, 232, 238, 275, 275, 279, 276, 279, 275, 297, 110},
+                {454, 275, 275, 275, 275, 275, 279, 279, 279, 279, 275, 297, 110},
+
 
         };
+
         for (int i=0;i<2;i++)
             orc.add(new Skeleton(new PointF(100,100)));
         testMap = new GameMap(spriteIds);
@@ -92,7 +95,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         for (PointF pos : sqarePos)
             c.drawRect(pos.x, pos.y, pos.x+ DEFAULT_SIZE, pos.y+DEFAULT_SIZE, redPaint);
-        c.drawBitmap(GameSheet.SKELETON.getSpriteSheet(),500,500,null);
+       // c.drawBitmap(GameSheet.SKELETON.getSpriteSheet(),500,500,null);
+        c.drawBitmap(GameSheet.SKELETON.getSprite(0,0),100,100,null);
        // for (PointF pos: orc)
             c.drawBitmap(GameSheet.ORC.getSprite(0,0),x,    y,null);
 

@@ -10,7 +10,7 @@ import com.Groupe4.td_android_projet.helpers.interfaces.BitmapMethods;
 
 public enum Floor implements BitmapMethods {
 
-    OUTSIDE(R.drawable.tileset_floor, 10, 10);
+    OUTSIDE(R.drawable.tileset_floor, 22, 26);
 
     private Bitmap[] sprites;
 
