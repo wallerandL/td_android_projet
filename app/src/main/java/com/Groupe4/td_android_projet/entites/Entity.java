@@ -1,7 +1,7 @@
 package com.Groupe4.td_android_projet.entites;
 
 import android.graphics.*;
-public class Entity {
+public abstract class Entity {
 
     protected RectF hitbox;
 
