@@ -94,7 +94,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             c.drawRect(pos.x, pos.y, pos.x+ DEFAULT_SIZE, pos.y+DEFAULT_SIZE, redPaint);
         c.drawBitmap(GameSheet.SKELETON.getSpriteSheet(),500,500,null);
        // for (PointF pos: orc)
-            c.drawBitmap(GameSheet.ORC.getSprite(9,1),x,    y,null);
+            c.drawBitmap(GameSheet.ORC.getSprite(0,0),x,    y,null);
 
         holder.unlockCanvasAndPost(c);
     }
