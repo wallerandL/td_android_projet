@@ -32,7 +32,14 @@ public class GameLoop implements Runnable{
             lastDelta=nowDelta;
 
             fps++;
-            //Log.e("fps", String.valueOf(fps));
+
+
+            long now = System.currentTimeMillis();
+            if (now - lastFPScheck >= 1000){
+                System.out.println("FPS : " + fps + " " + System.currentTimeMillis());
+                fps = 0;
+                lastFPScheck += 1000;
+            }
         }
 
     }
