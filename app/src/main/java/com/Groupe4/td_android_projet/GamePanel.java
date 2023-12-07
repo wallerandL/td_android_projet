@@ -43,10 +43,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         holder = getHolder();
         holder.addCallback(this);
         yellowPaint.setColor(Color.rgb(255,140,0));
-        redPaint.setColor(Color.RED);
+      //  redPaint.setColor(Color.RED);
 
         gameLoop = new GameLoop(this);
-
+/*
         skeleton = new Skeleton(new PointF(100,100));
         allies= new Allies(new PointF(500,500));
 
@@ -63,13 +63,15 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         };
         testMap = new GameMap(spriteIds);
+
+ */
     }
 
     public void render(){
         Canvas c = holder.lockCanvas();
         c.drawColor(Color.BLACK);
 
-        testMap.draw(c);
+       // testMap.draw(c);
 
         float stripeWidth = 200f; // ajustez la largeur de la bande selon vos besoins
         float screenWidth = getWidth();
@@ -80,22 +82,22 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         c.drawRect(stripeLeft,stripeTop, stripeRight, stripeBottom, yellowPaint);
 
-        drawCharacter(c,skeleton);
-        drawCharacter(c,allies);
+       // drawCharacter(c,skeleton);
+       // drawCharacter(c,allies);
         holder.unlockCanvasAndPost(c);
     }
 
 
 
-    public void drawCharacter(Canvas canvas, Character c){
-        canvas.drawBitmap(c.getGameSheetType().getSprite(c.getFaceDir(),c.getAniIndex()), c.getHitbox().left,c.getHitbox().top,null);
+   // public void drawCharacter(Canvas canvas, Character c){
+     //   canvas.drawBitmap(c.getGameSheetType().getSprite(c.getFaceDir(),c.getAniIndex()), c.getHitbox().left,c.getHitbox().top,null);
 
-    }
+    //}
 
     public void update(double delta){
-        skeleton.update(delta);
-        for (Skeleton skeleton : skeletons)
-            skeleton.update(delta);
+    //    skeleton.update(delta);
+      //  for (Skeleton skeleton : skeletons)
+       //     skeleton.update(delta);
 
         //Log.d("update count", "update: marche");
         }
