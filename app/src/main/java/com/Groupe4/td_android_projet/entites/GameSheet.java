@@ -29,7 +29,7 @@ public enum GameSheet implements BitmapMethods {
         spriteSheet = BitmapFactory.decodeResource(MainActivity.getGameContext().getResources(), resID, options);
         for (int j = 0; j < sprites.length; j++)
             for (int i = 0; i < sprites.length; i++) {
-                Log.v("boucle", "coordonner" + i + j);
+                Log.v("boucle", "coordonnees" + i + j);
                 sprites[i][j] = getScaledBitmap(Bitmap.createBitmap(spriteSheet, GameConstants.Sprite.DEFAULT_SIZE * i, GameConstants.Sprite.DEFAULT_SIZE * j, GameConstants.Sprite.DEFAULT_SIZE, GameConstants.Sprite.DEFAULT_SIZE));
             }
     }
