@@ -19,7 +19,7 @@ public enum GameSheet implements BitmapMethods {
 
     //PLAYER,
     SKELETON(R.drawable.skeleton_spritesheet),
-    Player(R.drawable.player_spritesheet);
+    PLAYER(R.drawable.player_spritesheet);
     private Bitmap spriteSheet;
     private Bitmap[][] sprites=new Bitmap[4][7];
     private BitmapFactory.Options options = new BitmapFactory.Options();
