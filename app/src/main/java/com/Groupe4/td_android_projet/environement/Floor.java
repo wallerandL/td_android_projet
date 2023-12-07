@@ -3,7 +3,7 @@ package com.Groupe4.td_android_projet.environement;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.Groupe4.td_android_projet.MainActivity;
+import com.Groupe4.td_android_projet.Main.MainActivity;
 import com.Groupe4.td_android_projet.R;
 import com.Groupe4.td_android_projet.helpers.GameConstants;
 import com.Groupe4.td_android_projet.helpers.interfaces.BitmapMethods;
