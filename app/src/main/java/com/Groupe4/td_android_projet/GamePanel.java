@@ -1,13 +1,11 @@
 package com.Groupe4.td_android_projet;
 
-import  static com.Groupe4.td_android_projet.helpers.GameConstants.Sprite.DEFAULT_SIZE;
-import static com.Groupe4.td_android_projet.MainActivity.GAME_WIDTH;
-import static com.Groupe4.td_android_projet.MainActivity.GAME_HEIGHT;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -19,10 +17,8 @@ import java.util.Random;
 
 import com.Groupe4.td_android_projet.entites.Character;
 import com.Groupe4.td_android_projet.entites.enemies.Skeleton;
-import com.Groupe4.td_android_projet.entites.Allies;
+import com.Groupe4.td_android_projet.entites.tours.Allies;
 import com.Groupe4.td_android_projet.environement.GameMap;
-import com.Groupe4.td_android_projet.entites.GameSheet;
-import com.Groupe4.td_android_projet.helpers.GameConstants;
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -48,7 +44,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         holder.addCallback(this);
         yellowPaint.setColor(Color.rgb(255,140,0));
         redPaint.setColor(Color.RED);
+
         gameLoop = new GameLoop(this);
+
         skeleton = new Skeleton(new PointF(100,100));
         allies= new Allies(new PointF(500,500));
 
@@ -72,19 +70,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         c.drawColor(Color.BLACK);
 
         testMap.draw(c);
-/*
 
-            c.drawBitmap(GameSheet.MAP.getSpriteSheet(),50,500,null);
-
-            c.drawBitmap(GameSheet.MAP.getSprite(1,1),0,0,null);
-
-            //c.drawBitmap(GameSheet.GRASS.getSpriteSheet(),200,1600,null);
-
-            c.drawBitmap(GameSheet.GRASS.getSprite(8,1),60,90,null);
-
-            c.drawBitmap(GameSheet.WATER.getSprite(1,6),120,180,null);
-            GameSheet.ROAD.getSprite(9,0);
-            c.drawBitmap(GameSheet.ROAD.getSprite(9,0),180,500,null);*/
         float stripeWidth = 200f; // ajustez la largeur de la bande selon vos besoins
         float screenWidth = getWidth();
         float stripeLeft = screenWidth - stripeWidth;
@@ -94,11 +80,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         c.drawRect(stripeLeft,stripeTop, stripeRight, stripeBottom, yellowPaint);
 
-
-//        for (PointF pos : sqarePos)
-//            c.drawRect(pos.x, pos.y, pos.x+ DEFAULT_SIZE, pos.y+DEFAULT_SIZE, redPaint);
-       // c.drawBitmap(GameSheet.SKELETON.getSpriteSheet(),500,500,null);
- //       c.drawBitmap(GameSheet.SKELETON.getSprite(0,0),100,100,null);
         drawCharacter(c,skeleton);
         drawCharacter(c,allies);
         holder.unlockCanvasAndPost(c);
@@ -116,13 +97,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         for (Skeleton skeleton : skeletons)
             skeleton.update(delta);
 
+        //Log.d("update count", "update: marche");
         }
 
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN){
-            //sqarePos.add(new PointF(event.getX(),event.getY()));
             x=event.getX();
             y=event.getY();
             render();
@@ -134,12 +115,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
-//        for(x=0; x<34; x++){
-//            for(y=0; y<64; y++){
-//                sqarePos.add(new PointF(x,y));
-//            }
-//        }
-        render();
+        gameLoop.startGameLoop();
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.Groupe4.td_android_projet;
 
+import android.util.Log;
+
 import com.Groupe4.td_android_projet.GamePanel;
 
 public class GameLoop implements Runnable{
@@ -30,14 +32,7 @@ public class GameLoop implements Runnable{
             lastDelta=nowDelta;
 
             fps++;
-
-
-/*            long now = System.currentTimeMillis();
-            if (now - lastFPScheck >= 1000){
-                System.out.println("FPS : " + fps + " " + System.currentTimeMillis());
-                fps = 0;
-                lastFPScheck += 1000;
-            }*/
+            //Log.e("fps", String.valueOf(fps));
         }
 
     }
