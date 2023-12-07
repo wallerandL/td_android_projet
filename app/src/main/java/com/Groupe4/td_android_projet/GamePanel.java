@@ -19,6 +19,7 @@ import java.util.Random;
 
 import com.Groupe4.td_android_projet.entites.Character;
 import com.Groupe4.td_android_projet.entites.enemies.Skeleton;
+import com.Groupe4.td_android_projet.entites.Allies;
 import com.Groupe4.td_android_projet.environement.GameMap;
 import com.Groupe4.td_android_projet.entites.GameSheet;
 import com.Groupe4.td_android_projet.helpers.GameConstants;
@@ -37,6 +38,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private GameLoop gameLoop;
     private GameMap testMap;
     private Skeleton skeleton;
+    private Allies allies;
 
     private ArrayList<Skeleton> skeletons;
     public GamePanel(Context context) {
@@ -48,6 +50,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         redPaint.setColor(Color.RED);
         gameLoop = new GameLoop(this);
         skeleton = new Skeleton(new PointF(100,100));
+        allies= new Allies(new PointF(500,500));
 
         int[][] spriteIds = {
 
@@ -97,6 +100,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
        // c.drawBitmap(GameSheet.SKELETON.getSpriteSheet(),500,500,null);
  //       c.drawBitmap(GameSheet.SKELETON.getSprite(0,0),100,100,null);
         drawCharacter(c,skeleton);
+        drawCharacter(c,allies);
         holder.unlockCanvasAndPost(c);
     }
 
