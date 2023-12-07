@@ -1,4 +1,4 @@
-package com.Groupe4.td_android_projet;
+package com.Groupe4.td_android_projet.Main;
 
 import androidx.appcompat.app.AppCompatActivity;
 

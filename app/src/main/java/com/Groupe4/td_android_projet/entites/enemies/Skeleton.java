@@ -5,8 +5,8 @@ import android.graphics.PointF;
 import com.Groupe4.td_android_projet.entites.Character;
 import com.Groupe4.td_android_projet.entites.GameSheet;
 import com.Groupe4.td_android_projet.helpers.GameConstants;
-import static com.Groupe4.td_android_projet.MainActivity.GAME_HEIGHT;
-import static com.Groupe4.td_android_projet.MainActivity.GAME_WIDTH;
+import static com.Groupe4.td_android_projet.Main.MainActivity.GAME_HEIGHT;
+import static com.Groupe4.td_android_projet.Main.MainActivity.GAME_WIDTH;
 
 import java.util.Random;
 

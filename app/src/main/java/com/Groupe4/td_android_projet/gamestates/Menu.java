@@ -5,12 +5,13 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.MotionEvent;
 
+import com.Groupe4.td_android_projet.Main.Game;
 import com.Groupe4.td_android_projet.helpers.interfaces.GameStateInterface;
 
-public class Menu implements GameStateInterface {
+public class Menu extends BaseState implements GameStateInterface {
     private Paint paint;
-    public Menu( ) {
-        super();
+    public Menu(Game game) {
+        super(game);
         paint = new Paint();
         paint.setTextSize(60);
         paint.setColor(Color.WHITE);

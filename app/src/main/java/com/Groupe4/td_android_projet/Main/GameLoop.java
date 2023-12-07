@@ -1,15 +1,11 @@
-package com.Groupe4.td_android_projet;
-
-import android.util.Log;
-
-import com.Groupe4.td_android_projet.GamePanel;
+package com.Groupe4.td_android_projet.Main;
 
 public class GameLoop implements Runnable{
     private Thread gameThread;
-    private GamePanel gamePanel;
+    private Game game;
 
-    public GameLoop(GamePanel gamePanel){
-        this.gamePanel = gamePanel;
+    public GameLoop(Game game){
+        this.game = game;
         gameThread = new Thread(this);
 
     }
@@ -27,8 +23,8 @@ public class GameLoop implements Runnable{
             long nowDelta = System.nanoTime();
             double timeSinceLaseDelta = nowDelta - lastDelta;
             double delta = timeSinceLaseDelta / nanoSec;
-            gamePanel.update(delta);
-            gamePanel.render();
+            game.update(delta);
+            game.render();
             lastDelta=nowDelta;
 
             fps++;

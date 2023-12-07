@@ -2,18 +2,13 @@ package com.Groupe4.td_android_projet.entites;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.service.quicksettings.Tile;
-import android.service.quicksettings.TileService;
 import android.util.Log;
 
 import com.Groupe4.td_android_projet.helpers.GameConstants;
 import com.Groupe4.td_android_projet.helpers.interfaces.BitmapMethods;
 
-import com.Groupe4.td_android_projet.MainActivity;
+import com.Groupe4.td_android_projet.Main.MainActivity;
 import com.Groupe4.td_android_projet.R;
-
-import java.io.File;
-import java.util.ArrayList;
 
 public enum GameSheet implements BitmapMethods {
 

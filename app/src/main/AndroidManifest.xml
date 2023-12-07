@@ -13,7 +13,7 @@
         android:theme="@style/Theme.Td_android_projet"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".Main.MainActivity"
             android:screenOrientation="landscape"
             android:exported="true">
             <intent-filter>
