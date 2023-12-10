@@ -5,12 +5,14 @@ import android.graphics.Canvas;
 import com.Groupe4.td_android_projet.entites.enemies.Skeleton;
 import com.Groupe4.td_android_projet.helpers.GameConstants;
 
+import java.util.ArrayList;
+
 public class MapManager {
 
     private GameMap currentMap;
 
     public MapManager() {
-        initTestMap();
+        initTestMap(new ArrayList<>());
     }
     public int getMaxWidthCurrentMap() {
         return currentMap.getArrayWidth() * GameConstants.Sprite.SIZE;
@@ -24,10 +26,10 @@ public class MapManager {
     public void draw(Canvas c) {
         for (int j = 0; j < currentMap.getArrayHeight(); j++)
             for (int i = 0; i < currentMap.getArrayWidth(); i++)
-                c.drawBitmap(Floor.OUTSIDE.getSprite(spriteIds[j][i]), i * GameConstants.Sprite.SIZE, j * GameConstants.Sprite.SIZE, null);
+                c.drawBitmap(Floor.OUTSIDE.getSprite(currentMap.getSpriteID(j,i)), i * GameConstants.Sprite.SIZE, j * GameConstants.Sprite.SIZE, null);
     }
 
-    public void initTestMap() {
+    public void initTestMap(ArrayList<Skeleton> skeletonsArrayList) {
 
         int[][] spriteIds = {
 
@@ -42,6 +44,6 @@ public class MapManager {
 
         };
 
-        currentMap = new GameMap(spriteIds,ArrayList<Skeleton>skeletonsArrayList);
+        currentMap = new GameMap(spriteIds,skeletonsArrayList);
     }
 }

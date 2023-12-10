@@ -10,6 +10,7 @@ import android.graphics.PointF;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
+import com.Groupe4.td_android_projet.entites.Character;
 import com.Groupe4.td_android_projet.Main.GameLoop;
 import com.Groupe4.td_android_projet.entites.enemies.Skeleton;
 import com.Groupe4.td_android_projet.entites.tours.Allies;
@@ -47,19 +48,7 @@ public class Playing extends BaseState implements GameStateInterface {
         skeleton = new Skeleton(new PointF(100,100));
         allies= new Allies(new PointF(500,500));
 
-        int[][] spriteIds = {
 
-                {454, 276, 275, 275, 275, 275, 275, 279, 275, 275, 190, 297, 110},
-                {454, 275, 275, 275, 169, 232, 232, 232, 232, 232, 238, 297, 110},
-                {454, 275, 275, 276, 190, 275, 279, 275, 275, 275, 279, 297, 110},
-                {454, 275, 275, 279, 190, 275, 275, 275, 275, 275, 275, 297, 110},
-                {454, 275, 275, 276, 190, 275, 275, 279, 279, 279, 275, 297, 110},
-                {232, 232, 232, 232, 238, 275, 275, 279, 276, 279, 275, 297, 110},
-                {454, 275, 275, 275, 275, 275, 279, 279, 279, 279, 275, 297, 110},
-
-
-        };
-        testMap = new GameMap(spriteIds);
     }
 
 
@@ -75,20 +64,20 @@ public class Playing extends BaseState implements GameStateInterface {
     public void render(Canvas c) {
         testMap.draw(c);
 
-        drawCharacter(c,skeleton);
-        drawCharacter(c,allies);
+
 
         float stripeWidth = 200f; // ajustez la largeur de la bande selon vos besoins
-        float screenWidth = getWidth();
+        float screenWidth = c.getWidth();
         float stripeLeft = screenWidth - stripeWidth;
         float stripeTop = 0;
         float stripeRight = screenWidth;
-        float stripeBottom = getHeight();
+        float stripeBottom = c.getHeight();
         c.drawRect(stripeLeft,stripeTop, stripeRight, stripeBottom, yellowPaint);
 
-
+        drawCharacter(c,skeleton);
+        drawCharacter(c,allies);
         }
-    }
+
 
     @Override
     public void touchEvents(MotionEvent event) {

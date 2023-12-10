@@ -26,8 +26,8 @@ public class Game {
     public void update(double delta) {
 
         switch (currentGameState) {
-            case MENU -> menu.update(delta);
-            case PLAYING -> playing.update(delta);
+            case MENU : menu.update(delta);
+            case PLAYING : playing.update(delta);
         }
     }
 
@@ -37,8 +37,8 @@ public class Game {
 
         //Draw the game
         switch (currentGameState) {
-            case MENU -> menu.render(c);
-            case PLAYING -> playing.render(c);
+            case MENU : menu.render(c);
+            case PLAYING : playing.render(c);
         }
 
         holder.unlockCanvasAndPost(c);
@@ -51,8 +51,8 @@ public class Game {
 
     public boolean touchEvent(MotionEvent event) {
         switch (currentGameState) {
-            case MENU -> menu.touchEvents(event);
-            case PLAYING -> playing.touchEvents(event);
+           case MENU : menu.touchEvents(event);
+           case PLAYING : playing.touchEvents(event);
         }
 
         return true;
