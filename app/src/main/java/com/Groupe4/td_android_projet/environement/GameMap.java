@@ -38,9 +38,7 @@ public class GameMap {
         }
 
         public int getSpriteID(int xIndex, int yIndex) {
-            //Log.v("spriteID","y"+yIndex+" x"+xIndex);
-            if(yIndex>6)
-                yIndex=0;
+
             return spriteIds[yIndex][xIndex];
         }
     }

@@ -26,7 +26,7 @@ public class MapManager {
     public void draw(Canvas c) {
         for (int j = 0; j < currentMap.getArrayHeight(); j++)
             for (int i = 0; i < currentMap.getArrayWidth(); i++)
-                c.drawBitmap(Floor.OUTSIDE.getSprite(currentMap.getSpriteID(j,i)), i * GameConstants.Sprite.SIZE, j * GameConstants.Sprite.SIZE, null);
+                c.drawBitmap(Floor.OUTSIDE.getSprite(currentMap.getSpriteID(i,j)), i * GameConstants.Sprite.SIZE, j * GameConstants.Sprite.SIZE, null);
     }
 
     public void initTestMap(ArrayList<Skeleton> skeletonsArrayList) {
