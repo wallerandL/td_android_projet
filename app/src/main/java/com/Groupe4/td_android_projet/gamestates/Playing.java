@@ -15,6 +15,7 @@ import com.Groupe4.td_android_projet.Main.GameLoop;
 import com.Groupe4.td_android_projet.entites.enemies.Skeleton;
 import com.Groupe4.td_android_projet.entites.tours.Allies;
 import com.Groupe4.td_android_projet.environement.GameMap;
+import com.Groupe4.td_android_projet.environement.MapManager;
 import com.Groupe4.td_android_projet.Main.Game;
 import com.Groupe4.td_android_projet.helpers.interfaces.GameStateInterface;
 
@@ -34,7 +35,7 @@ public class Playing extends BaseState implements GameStateInterface {
     private ArrayList<PointF> sqarePos = new ArrayList<>() ;
 
     private GameLoop gameLoop;
-    private GameMap testMap;
+    private MapManager testMap;
     private Skeleton skeleton;
     private Allies allies;
 
@@ -47,6 +48,7 @@ public class Playing extends BaseState implements GameStateInterface {
         yellowPaint.setColor(Color.rgb(255,140,0));
         skeleton = new Skeleton(new PointF(100,100));
         allies= new Allies(new PointF(500,500));
+        testMap = new MapManager();
 
 
     }
@@ -63,8 +65,6 @@ public class Playing extends BaseState implements GameStateInterface {
     @Override
     public void render(Canvas c) {
         testMap.draw(c);
-
-
 
         float stripeWidth = 200f; // ajustez la largeur de la bande selon vos besoins
         float screenWidth = c.getWidth();

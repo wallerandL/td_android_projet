@@ -44,6 +44,6 @@ public class MapManager {
 
         };
 
-        currentMap = new GameMap(spriteIds,skeletonsArrayList);
+        currentMap = new GameMap(spriteIds);
     }
 }

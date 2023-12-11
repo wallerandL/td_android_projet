@@ -16,7 +16,7 @@ import com.Groupe4.td_android_projet.entites.enemies.Skeleton;
 import com.Groupe4.td_android_projet.entites.tours.Allies;
 import com.Groupe4.td_android_projet.environement.GameMap;
 
-public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
+public class    GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     private Paint redPaint = new Paint();
 

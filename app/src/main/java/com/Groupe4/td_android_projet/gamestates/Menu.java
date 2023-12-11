@@ -24,7 +24,7 @@ public class Menu extends BaseState implements GameStateInterface {
 
     @Override
     public void render(Canvas c) {
-        c.drawText("MENU!", 800, 200, paint);
+       c.drawText("MENU!", 800, 200, paint);
 
     }
 
