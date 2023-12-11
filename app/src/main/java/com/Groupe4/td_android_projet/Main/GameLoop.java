@@ -2,9 +2,9 @@ package com.Groupe4.td_android_projet.Main;
 
 public class GameLoop implements Runnable{
     private Thread gameThread;
-    private Game game;
+    private final Game game;
 
-    public GameLoop(Game game){
+    public GameLoop(Game game) {
         this.game = game;
         gameThread = new Thread(this);
 
@@ -28,7 +28,14 @@ public class GameLoop implements Runnable{
             lastDelta=nowDelta;
 
             fps++;
-            //Log.e("fps", String.valueOf(fps));
+
+
+            long now = System.currentTimeMillis();
+            if (now - lastFPScheck >= 1000){
+                System.out.println("FPS : " + fps + " " + System.currentTimeMillis());
+                fps = 0;
+                lastFPScheck += 1000;
+            }
         }
 
     }

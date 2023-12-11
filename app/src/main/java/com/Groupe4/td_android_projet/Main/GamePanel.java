@@ -1,8 +1,6 @@
 package com.Groupe4.td_android_projet.Main;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.view.MotionEvent;
@@ -18,7 +16,7 @@ import com.Groupe4.td_android_projet.entites.enemies.Skeleton;
 import com.Groupe4.td_android_projet.entites.tours.Allies;
 import com.Groupe4.td_android_projet.environement.GameMap;
 
-public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
+public class    GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     private Paint redPaint = new Paint();
 
@@ -29,43 +27,78 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private float x,y;
     private ArrayList<PointF> sqarePos = new ArrayList<>() ;
 
-    Game game;
     private GameLoop gameLoop;
     private GameMap testMap;
     private Skeleton skeleton;
     private Allies allies;
 
     private ArrayList<Skeleton> skeletons;
+    private final Game game;
     public GamePanel(Context context) {
         super(context);
-        skeletons = new ArrayList<>();
-        holder = getHolder();
+
+        SurfaceHolder holder = getHolder();
         holder.addCallback(this);
+
+      //  redPaint.setColor(Color.RED);
+
+       // gameLoop = new GameLoop(this);
         game = new Game(holder);
-        yellowPaint.setColor(Color.rgb(255,140,0));
+/*
+        skeleton = new Skeleton(new PointF(100,100));
+        allies= new Allies(new PointF(500,500));
+
+        int[][] spriteIds = {
+
+                {454, 276, 275, 275, 275, 275, 275, 279, 275, 275, 190, 297, 110},
+                {454, 275, 275, 275, 169, 232, 232, 232, 232, 232, 238, 297, 110},
+                {454, 275, 275, 276, 190, 275, 279, 275, 275, 275, 279, 297, 110},
+                {454, 275, 275, 279, 190, 275, 275, 275, 275, 275, 275, 297, 110},
+                {454, 275, 275, 276, 190, 275, 275, 279, 279, 279, 275, 297, 110},
+                {232, 232, 232, 232, 238, 275, 275, 279, 276, 279, 275, 297, 110},
+                {454, 275, 275, 275, 275, 275, 279, 279, 279, 279, 275, 297, 110},
+
+
+        };
+        testMap = new GameMap(spriteIds);
+
+ */
     }
 
-    public void render(){
+  /*  public void render(){
         Canvas c = holder.lockCanvas();
         c.drawColor(Color.BLACK);
 
-        float stripeWidth = 200f; // ajustez la largeur de la bande selon vos besoins
-        float screenWidth = getWidth();
-        float stripeLeft = screenWidth - stripeWidth;
-        float stripeTop = 0;
-        float stripeRight = screenWidth;
-        float stripeBottom = getHeight();
+       // testMap.draw(c);
 
-        c.drawRect(stripeLeft,stripeTop, stripeRight, stripeBottom, yellowPaint);
 
+
+
+
+       // drawCharacter(c,skeleton);
+       // drawCharacter(c,allies);
         holder.unlockCanvasAndPost(c);
     }
 
+*/
 
-   /* @Override
+   // public void drawCharacter(Canvas canvas, Character c){
+     //   canvas.drawBitmap(c.getGameSheetType().getSprite(c.getFaceDir(),c.getAniIndex()), c.getHitbox().left,c.getHitbox().top,null);
+
+    //}
+
+  /*  public void update(double delta){
+    //    skeleton.update(delta);
+      //  for (Skeleton skeleton : skeletons)
+       //     skeleton.update(delta);
+
+        //Log.d("update count", "update: marche");
+        }
+
+*/
+    @Override
     public boolean onTouchEvent(MotionEvent event) {
-        return game.touchEvent(event);
-        if (event.getAction() == MotionEvent.ACTION_DOWN){
+     /*   if (event.getAction() == MotionEvent.ACTION_DOWN){
             x=event.getX();
             y=event.getY();
             render();
@@ -73,11 +106,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         }
 
         return true;
+        */
+
+        return game.touchEvent(event);
     }
-*/
+
     @Override
-    public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
-        gameLoop.startGameLoop();
+    public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {game.startGameLoop();
     }
 
     @Override
