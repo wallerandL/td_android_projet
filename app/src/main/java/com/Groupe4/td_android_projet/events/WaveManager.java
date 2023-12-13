@@ -33,7 +33,7 @@ public class WaveManager {
     }
 
     private void creatWaves() {
-        waves.add(new Waves(new ArrayList<Integer>(Arrays.asList(SKELLETON,SKELLETON,SKELLETON,SKELLETON,SKELLETON,SKELLETON,SKELLETON,SKELLETON,SKELLETON,SKELLETON))));
+        waves.add(new Waves(new ArrayList<Integer>(Arrays.asList(SKELLETON,SKELLETON))));
     }
 
     public ArrayList<Waves> getWaves(){

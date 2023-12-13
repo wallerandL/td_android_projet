@@ -113,7 +113,7 @@ public class Playing extends BaseState implements GameStateInterface {
         c.drawRect(stripeLeft,stripeTop, stripeRight, stripeBottom, yellowPaint);
         for (Skeleton skeleton : skeletons)
             drawCharacter(c, skeleton);
- //       drawCharacter(c,skeleton);
+
         c.drawRect(stripeLeft, stripeTop, stripeRight, stripeBottom, yellowPaint);
 
         // Charger l'image drawable depuis les ressources
@@ -131,8 +131,6 @@ public class Playing extends BaseState implements GameStateInterface {
         // Dessiner l'image redimensionnée dans le rectangle
         c.drawBitmap(Bitmap.createScaledBitmap(buttonImage, newWidth, newHeight, false),
                 buttonX, buttonY, yellowPaint);
-
-        drawCharacter(c,skeleton);
         drawCharacter(c,allies);
         }
 
