@@ -129,10 +129,19 @@ public class Playing extends BaseState implements GameStateInterface {
         float stripeRight = screenWidth;
         float stripeBottom = c.getHeight();
         c.drawRect(stripeLeft,stripeTop, stripeRight, stripeBottom, yellowPaint);
+Ajout
         for (Skeleton skeleton : skeletons)
             drawCharacter(c, skeleton);
+
         for(EskimoNinja e : eskimoNinjas)
             drawCharacter(c, e);
+
+        for(Knight k : knights)
+            drawCharacter(c, k);
+
+        for(Spirit s : spirits)
+            drawCharacter(c, s);
+
         c.drawRect(stripeLeft, stripeTop, stripeRight, stripeBottom, yellowPaint);
 
         //region Affichage eskimoninja
@@ -195,12 +204,25 @@ public class Playing extends BaseState implements GameStateInterface {
 
                 //region Selection eskimo
                 if (x >= buttonX && x <= buttonX + newWidth && y >= buttonY && y <= buttonY + newHeight) {
-                    Log.v("if marche", "TouchEvent : ca marche");
+                    Log.v("if marche", "TouchEvent : ca marche eskimo");
                     eskimo_selected= true;
                     return true;
                 }
                 //endregion
-
+                //region Selection spirit
+                if (x >= buttonX2 && x <= buttonX2 + newWidth && y >= buttonY2 && y <= buttonY2 + newHeight) {
+                    Log.v("if marche", "TouchEvent : ca marche spirit ");
+                    spirit_selected= true;
+                    return true;
+                }
+                //endregion
+                //region Selection knight
+                if (x >= buttonX3 && x <= buttonX3 + newWidth && y >= buttonY3 && y <= buttonY3 + newHeight) {
+                    Log.v("if marche", "TouchEvent : ca marche knight");
+                    knight_selected= true;
+                    return true;
+                }
+                //endregion
 
                 break;
 
@@ -214,7 +236,19 @@ public class Playing extends BaseState implements GameStateInterface {
                 if(eskimo_selected)
                 {
                     spawnEskimo(x,y);
+                    eskimo_selected=false;
                 }
+                if(knight_selected)
+                {
+                    spawnKnight(x,y);
+                    knight_selected=false;
+                }
+                if(spirit_selected)
+                {
+                    spawnSpirit(x,y);
+                    spirit_selected=false;
+                }
+
                 break;
         }
         return false;
