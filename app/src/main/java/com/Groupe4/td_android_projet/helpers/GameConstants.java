@@ -21,5 +21,8 @@ public class GameConstants {
         public static final int AMOUNT = 4;
 
     }
+    public static final class Enemies{
+        public static final int SKELLETON = 1;
+    }
 
 }
