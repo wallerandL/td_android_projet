@@ -29,9 +29,10 @@ public class Menu extends BaseState implements GameStateInterface {
     }
 
     @Override
-    public void touchEvents(MotionEvent event) {
+    public boolean touchEvents(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN)
             game.setCurrentGameState(Game.GameState.PLAYING);
 
+        return false;
     }
 }

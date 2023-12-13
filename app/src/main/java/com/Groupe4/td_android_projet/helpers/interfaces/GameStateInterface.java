@@ -7,5 +7,5 @@ public interface GameStateInterface {
 
     void update(double delta);
     void render(Canvas c);
-    void touchEvents(MotionEvent event);
+    boolean touchEvents(MotionEvent event);
 }
