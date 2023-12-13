@@ -14,7 +14,12 @@ public enum GameSheet implements BitmapMethods {
 
     //PLAYER,
     SKELETON(R.drawable.skeleton_spritesheet),
-    PLAYER(R.drawable.player_spritesheet);
+    PLAYER(R.drawable.player_spritesheet),
+    FACEESKIMONINJA(R.drawable.faceset_eskimoninja),
+    ESKIMONINJA(R.drawable.spritesheet_eskimoninja),
+    FACESPIRIT(R.drawable.faceset_spirit),
+    SPIRIT(R.drawable.spritesheet_spirit); // pour ajouter un élément à la liste, enlever le point virgule juste à gauche et ajouter un élément après une virgule
+
     private Bitmap spriteSheet;
     private Bitmap[][] sprites=new Bitmap[4][4];
     private BitmapFactory.Options options = new BitmapFactory.Options();
@@ -36,9 +41,5 @@ public enum GameSheet implements BitmapMethods {
     public Bitmap getSprite(int yPos,int xPos){
         return sprites[yPos][xPos];
     }
-    /*private Bitmap getScaledBitmap(Bitmap bitmap){
-        return Bitmap.createScaledBitmap(bitmap,bitmap.getWidth()*5,bitmap.getHeight()*5,false);
-    }*/
-
 
 }
