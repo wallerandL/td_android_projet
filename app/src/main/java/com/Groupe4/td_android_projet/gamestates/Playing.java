@@ -94,11 +94,10 @@ public class Playing extends BaseState implements GameStateInterface {
 
     private boolean isTimeForNewEnemy() {
         Log.d("isTimeForNewEnemy", "Adding enemy of type: ");
-        if(this.getWaveManager().isThereMoreEnemiesInWaves()){
+        if(this.getWaveManager().isThereMoreEnemiesInWaves() && this.getWaveManager().isTimeForNewEnemyq()){
                 Log.d("isTimeForNewEnemy3", "Adding enemy of type: ");
                 return true;
         }
-
         return false;
     }
 

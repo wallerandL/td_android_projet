@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class WaveManager {
-    public boolean isTimeForNewEnemy;
     private Playing playing;
     private ArrayList<Waves> waves=new ArrayList<>();
     private int enemySpawnTickLimit=60*1;
@@ -39,7 +38,7 @@ public class WaveManager {
     public ArrayList<Waves> getWaves(){
         return waves;
     }
-    public boolean isTimeForNewEnemy(){
+    public boolean isTimeForNewEnemyq(){
         return enemySpawnTick>=enemySpawnTickLimit;
     }
     public boolean isThereMoreEnemiesInWaves(){
