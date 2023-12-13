@@ -23,6 +23,8 @@ public class GameConstants {
     }
     public static final class Enemies{
         public static final int SKELLETON = 1;
+        public static final int REPTIL = 2;
+
     }
 
 }

@@ -1,5 +1,6 @@
 package com.Groupe4.td_android_projet.events;
 
+import static com.Groupe4.td_android_projet.helpers.GameConstants.Enemies.REPTIL;
 import static com.Groupe4.td_android_projet.helpers.GameConstants.Enemies.SKELLETON;
 
 import android.annotation.SuppressLint;
@@ -32,7 +33,7 @@ public class WaveManager {
     }
 
     private void creatWaves() {
-        waves.add(new Waves(new ArrayList<Integer>(Arrays.asList(SKELLETON,SKELLETON))));
+        waves.add(new Waves(new ArrayList<Integer>(Arrays.asList(SKELLETON,SKELLETON,REPTIL))));
     }
 
     public ArrayList<Waves> getWaves(){

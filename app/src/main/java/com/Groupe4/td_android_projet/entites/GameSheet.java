@@ -17,7 +17,8 @@ public enum GameSheet implements BitmapMethods {
     PLAYER(R.drawable.player_spritesheet),
     ESKIMONINJA(R.drawable.spritesheet_eskimoninja),
     KNIGHT(R.drawable.spritesheet_knight),
-    SPIRIT(R.drawable.spritesheet_spirit); // pour ajouter un élément à la liste, enlever le point virgule juste à gauche et ajouter un élément après une virgule
+    SPIRIT(R.drawable.spritesheet_spirit),
+    REPTIL(R.drawable.reptile_spritesheet); // pour ajouter un élément à la liste, enlever le point virgule juste à gauche et ajouter un élément après une virgule
 
     private Bitmap spriteSheet;
     private Bitmap[][] sprites=new Bitmap[4][4];

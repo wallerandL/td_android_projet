@@ -2,6 +2,8 @@ package com.Groupe4.td_android_projet.gamestates;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
+import static com.Groupe4.td_android_projet.helpers.GameConstants.Enemies.REPTIL;
 import static com.Groupe4.td_android_projet.helpers.GameConstants.Enemies.SKELLETON;
 
 import android.graphics.Canvas;
@@ -16,6 +18,7 @@ import com.Groupe4.td_android_projet.Main.MainActivity;
 import com.Groupe4.td_android_projet.R;
 import com.Groupe4.td_android_projet.entites.Character;
 import com.Groupe4.td_android_projet.Main.GameLoop;
+import com.Groupe4.td_android_projet.entites.enemies.Reptil;
 import com.Groupe4.td_android_projet.entites.enemies.Skeleton;
 import com.Groupe4.td_android_projet.entites.tours.EskimoNinja;
 import com.Groupe4.td_android_projet.entites.tours.Knight;
@@ -46,6 +49,7 @@ public class Playing extends BaseState implements GameStateInterface {
     private GameLoop gameLoop;
     private MapManager testMap;
     private Skeleton skeleton;
+    private Reptil reptil;
     float x,y;
     private Allies allies;
     private Knight knight;
@@ -57,6 +61,7 @@ public class Playing extends BaseState implements GameStateInterface {
 
 
     private ArrayList<Skeleton> skeletons;
+    private ArrayList<Reptil> reptils;
     private ArrayList<EskimoNinja> eskimoNinjas;
     private ArrayList<Knight> knights;
     private ArrayList<Allies> players;
@@ -67,6 +72,7 @@ public class Playing extends BaseState implements GameStateInterface {
         super(game);
 
         skeletons = new ArrayList<>();
+        reptils = new ArrayList<>();
         eskimoNinjas = new ArrayList<>();
         knights = new ArrayList<>();
         spirits = new ArrayList<>();
@@ -74,6 +80,7 @@ public class Playing extends BaseState implements GameStateInterface {
         redPaint.setColor(Color.RED);
         yellowPaint.setColor(Color.rgb(255,140,0));
         skeleton = new Skeleton(new PointF(rand.nextInt(2220), rand.nextInt(1080)));
+        reptil = new Reptil(new PointF(rand.nextInt(2220), rand.nextInt(1080)));
         allies= new Allies(new PointF(500,500));
         testMap = new MapManager();
         waveManager = new WaveManager(this);
@@ -91,8 +98,13 @@ public class Playing extends BaseState implements GameStateInterface {
         skeleton.update(delta);
         for (Skeleton skeleton : skeletons)
             skeleton.update(delta);
+        reptil.update(delta);
+        for (Reptil reptil : reptils)
+            reptil.update(delta);
 
     }
+
+    //region vagues
     private void updateWaveManager(){
         this.getWaveManager().update();
     }
@@ -106,6 +118,9 @@ public class Playing extends BaseState implements GameStateInterface {
             case SKELLETON:
                 spawnSkeleton(rand.nextInt(2220), rand.nextInt(1080));
                 break;
+            case REPTIL:
+                spawnReptil(rand.nextInt(2220), rand.nextInt(1080));
+                break;
         }
     }
 
@@ -117,11 +132,13 @@ public class Playing extends BaseState implements GameStateInterface {
         }
         return false;
     }
+    //endregion
 
     @Override
     public void render(Canvas c) {
         testMap.draw(c);
 
+        //region ajout bar orange
         float stripeWidth = 200f; // ajustez la largeur de la bande selon vos besoins
         float screenWidth = c.getWidth();
         float stripeLeft = screenWidth - stripeWidth;
@@ -129,9 +146,14 @@ public class Playing extends BaseState implements GameStateInterface {
         float stripeRight = screenWidth;
         float stripeBottom = c.getHeight();
         c.drawRect(stripeLeft,stripeTop, stripeRight, stripeBottom, yellowPaint);
-Ajout
+        //endregion
+
+        //region draw tour / ennemies
         for (Skeleton skeleton : skeletons)
             drawCharacter(c, skeleton);
+
+        for (Reptil reptil : reptils)
+            drawCharacter(c, reptil);
 
         for(EskimoNinja e : eskimoNinjas)
             drawCharacter(c, e);
@@ -141,6 +163,8 @@ Ajout
 
         for(Spirit s : spirits)
             drawCharacter(c, s);
+        //endregion
+
 
         c.drawRect(stripeLeft, stripeTop, stripeRight, stripeBottom, yellowPaint);
 
@@ -253,7 +277,6 @@ Ajout
         }
         return false;
     }
-
     public void drawCharacter(Canvas canvas, Character c){
         canvas.drawBitmap(c.getGameSheetType().getSprite(c.getFaceDir(),c.getAniIndex()), c.getHitbox().left,c.getHitbox().top,null);
 }
@@ -268,7 +291,14 @@ Ajout
         }
 
     }
+    public void spawnReptil(float spawnX, float spawnY) {
+        synchronized (reptils) {
+            reptils.add(new Reptil(new PointF(spawnX,spawnY)));
+            System.out.println("Spawned reptil at: (" + spawnX + ", " + spawnY + ")");
 
+        }
+
+    }
     public void spawnEskimo(float localx, float localy) {
         synchronized (eskimoNinjas) {
             eskimoNinjas.add(new EskimoNinja(new PointF(localx,localy)));
