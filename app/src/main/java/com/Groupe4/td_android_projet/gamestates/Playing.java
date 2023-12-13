@@ -35,7 +35,7 @@ public class Playing extends BaseState implements GameStateInterface {
     private Paint yellowPaint = new Paint();
     private boolean movePlayer;
     private SurfaceHolder holder;
-    private float buttonX,buttonY;
+    private float buttonX,buttonY,buttonX2,buttonY2,buttonX3,buttonY3;
     private int newWidth, newHeight;
     private ArrayList<PointF> sqarePos = new ArrayList<>() ;
 
@@ -43,6 +43,8 @@ public class Playing extends BaseState implements GameStateInterface {
     private MapManager testMap;
     private Skeleton skeleton;
     private Allies allies;
+
+    private int decalage_y__selection_tour = 200;
 
 
 
@@ -116,6 +118,7 @@ public class Playing extends BaseState implements GameStateInterface {
 
         c.drawRect(stripeLeft, stripeTop, stripeRight, stripeBottom, yellowPaint);
 
+        //region Affichage eskimoninja
         // Charger l'image drawable depuis les ressources
         Bitmap buttonImage = BitmapFactory.decodeResource(MainActivity.getGameContext().getResources(), R.drawable.faceset_eskimoninja);
 
@@ -131,6 +134,35 @@ public class Playing extends BaseState implements GameStateInterface {
         // Dessiner l'image redimensionnée dans le rectangle
         c.drawBitmap(Bitmap.createScaledBitmap(buttonImage, newWidth, newHeight, false),
                 buttonX, buttonY, yellowPaint);
+        //endregion
+
+        //region Affichage spirit
+        // Charger l'image drawable depuis les ressources
+        Bitmap buttonImage2 = BitmapFactory.decodeResource(MainActivity.getGameContext().getResources(), R.drawable.faceset_spirit);
+
+        // Ajuster la position du bouton à l'intérieur du rectangle
+        buttonX2 = stripeLeft + 40; // Décalage de 10 pixels vers la gauche
+        buttonY2 = stripeTop + decalage_y__selection_tour + 30;
+
+        // Dessiner l'image redimensionnée dans le rectangle
+        c.drawBitmap(Bitmap.createScaledBitmap(buttonImage2, newWidth, newHeight, false),
+                buttonX2, buttonY2, yellowPaint);
+        //endregion
+
+        //region Affichage knight
+        // Charger l'image drawable depuis les ressources
+        Bitmap buttonImage3 = BitmapFactory.decodeResource(MainActivity.getGameContext().getResources(), R.drawable.faceset_knight);
+
+
+        // Ajuster la position du bouton à l'intérieur du rectangle
+        buttonX3 = stripeLeft + 40; // Décalage de 10 pixels vers la gauche
+        buttonY3 = stripeTop + 2*decalage_y__selection_tour + 30;
+
+        // Dessiner l'image redimensionnée dans le rectangle
+        c.drawBitmap(Bitmap.createScaledBitmap(buttonImage3, newWidth, newHeight, false),
+                buttonX3, buttonY3, yellowPaint);
+        //endregion
+
         drawCharacter(c,allies);
         }
 
@@ -152,10 +184,14 @@ public class Playing extends BaseState implements GameStateInterface {
 
             case MotionEvent.ACTION_UP:
                 // Vérifier si le clic est à l'intérieur des coordonnées de l'image
+
+                //region Selection eskimo
                 if (x >= buttonX && x <= buttonX + newWidth && y >= buttonY && y <= buttonY + newHeight) {
                     Log.v("if marche", "TouchEvent : ca marche");
-                    return true; // Indique que l'événement a été traité
+                    return true;
                 }
+                //endregion
+
                 break;
         }
         return false;
