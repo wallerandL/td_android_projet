@@ -27,7 +27,9 @@ public class Game {
 
         switch (currentGameState) {
             case MENU : menu.update(delta);
+                break;
             case PLAYING : playing.update(delta);
+                break;
         }
     }
 
@@ -38,7 +40,9 @@ public class Game {
         //Draw the game
         switch (currentGameState) {
             case MENU : menu.render(c);
+                break;
             case PLAYING : playing.render(c);
+                break;
         }
 
         holder.unlockCanvasAndPost(c);
@@ -52,7 +56,9 @@ public class Game {
     public boolean touchEvent(MotionEvent event) {
         switch (currentGameState) {
            case MENU : menu.touchEvents(event);
+               break;
            case PLAYING : playing.touchEvents(event);
+               break;
         }
 
         return true;

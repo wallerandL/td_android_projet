@@ -31,8 +31,8 @@ public class Playing extends BaseState implements GameStateInterface {
     private Paint yellowPaint = new Paint();
     private boolean movePlayer;
     private SurfaceHolder holder;
-    private float x,y;
-    private ArrayList<PointF> sqarePos = new ArrayList<>() ;
+    private float x, y;
+    private ArrayList<PointF> sqarePos = new ArrayList<>();
 
     private GameLoop gameLoop;
     private MapManager testMap;
@@ -40,14 +40,22 @@ public class Playing extends BaseState implements GameStateInterface {
     private Allies allies;
 
     private ArrayList<Skeleton> skeletons;
+
+
+    private float xCenter = 250, yCenter = 800, radius = 150;
+    private boolean touchDown;
+    private float xTouch, yTouch;
+
+
+
     public Playing(Game game) {
         super(game);
 
         skeletons = new ArrayList<>();
         redPaint.setColor(Color.RED);
-        yellowPaint.setColor(Color.rgb(255,140,0));
-        skeleton = new Skeleton(new PointF(100,100));
-        allies= new Allies(new PointF(500,500));
+        yellowPaint.setColor(Color.rgb(255, 140, 0));
+        skeleton = new Skeleton(new PointF(100, 100));
+        allies = new Allies(new PointF(500, 500));
         testMap = new MapManager();
 
 
@@ -72,25 +80,26 @@ public class Playing extends BaseState implements GameStateInterface {
         float stripeTop = 0;
         float stripeRight = screenWidth;
         float stripeBottom = c.getHeight();
-        c.drawRect(stripeLeft,stripeTop, stripeRight, stripeBottom, yellowPaint);
+        c.drawRect(stripeLeft, stripeTop, stripeRight, stripeBottom, yellowPaint);
 
-        drawCharacter(c,skeleton);
-        drawCharacter(c,allies);
-        }
+        drawCharacter(c, skeleton);
+        drawCharacter(c, allies);
+    }
+
+
 
 
     @Override
     public void touchEvents(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN)
+            game.setCurrentGameState(Game.GameState.MENU);
 
+            }
+
+    public void drawCharacter(Canvas canvas, Character c) {
+        canvas.drawBitmap(c.getGameSheetType().getSprite(c.getFaceDir(), c.getAniIndex()), c.getHitbox().left, c.getHitbox().top, null);
     }
 
-    public void drawCharacter(Canvas canvas, Character c){
-        canvas.drawBitmap(c.getGameSheetType().getSprite(c.getFaceDir(),c.getAniIndex()), c.getHitbox().left,c.getHitbox().top,null);
 }
 
 
-
-
-
-
-}
