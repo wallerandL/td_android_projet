@@ -2,6 +2,8 @@ package com.Groupe4.td_android_projet.gamestates;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import static com.Groupe4.td_android_projet.helpers.GameConstants.Enemies.SKELLETON;
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -15,6 +17,7 @@ import com.Groupe4.td_android_projet.R;
 import com.Groupe4.td_android_projet.entites.Character;
 import com.Groupe4.td_android_projet.Main.GameLoop;
 import com.Groupe4.td_android_projet.entites.enemies.Skeleton;
+import com.Groupe4.td_android_projet.events.WaveManager;
 import com.Groupe4.td_android_projet.entites.tours.Allies;
 import com.Groupe4.td_android_projet.environement.MapManager;
 import com.Groupe4.td_android_projet.Main.Game;
@@ -44,26 +47,57 @@ public class Playing extends BaseState implements GameStateInterface {
 
 
     private ArrayList<Skeleton> skeletons;
+    private WaveManager waveManager;
     public Playing(Game game) {
         super(game);
 
         skeletons = new ArrayList<>();
         redPaint.setColor(Color.RED);
         yellowPaint.setColor(Color.rgb(255,140,0));
-        skeleton = new Skeleton(new PointF(100,100));
+        skeleton = new Skeleton(new PointF(rand.nextInt(2220), rand.nextInt(1080)));
         allies= new Allies(new PointF(500,500));
         testMap = new MapManager();
-
+        waveManager = new WaveManager(this);
 
     }
 
 
     @Override
     public void update(double delta) {
+        updateWaveManager();
+        if(isTimeForNewEnemy()){
+            spawnEnemy();
+        }
+
         skeleton.update(delta);
         for (Skeleton skeleton : skeletons)
             skeleton.update(delta);
 
+    }
+    private void updateWaveManager(){
+        this.getWaveManager().update();
+    }
+
+    private void spawnEnemy() {
+        addEnemy(this.getWaveManager().getNextEnemy());
+    }
+    public void addEnemy(int enemyType) {
+        Log.d("Playing", "Adding enemy of type: " + enemyType);
+        switch (enemyType) {
+            case SKELLETON:
+                spawnSkeleton(rand.nextInt(2220), rand.nextInt(1080));
+                break;
+        }
+    }
+
+    private boolean isTimeForNewEnemy() {
+        Log.d("isTimeForNewEnemy", "Adding enemy of type: ");
+        if(this.getWaveManager().isThereMoreEnemiesInWaves()){
+                Log.d("isTimeForNewEnemy3", "Adding enemy of type: ");
+                return true;
+        }
+
+        return false;
     }
 
     @Override
@@ -76,6 +110,10 @@ public class Playing extends BaseState implements GameStateInterface {
         float stripeTop = 0;
         float stripeRight = screenWidth;
         float stripeBottom = c.getHeight();
+        c.drawRect(stripeLeft,stripeTop, stripeRight, stripeBottom, yellowPaint);
+        for (Skeleton skeleton : skeletons)
+            drawCharacter(c, skeleton);
+ //       drawCharacter(c,skeleton);
         c.drawRect(stripeLeft, stripeTop, stripeRight, stripeBottom, yellowPaint);
 
         // Charger l'image drawable depuis les ressources
@@ -128,10 +166,16 @@ public class Playing extends BaseState implements GameStateInterface {
     public void drawCharacter(Canvas canvas, Character c){
         canvas.drawBitmap(c.getGameSheetType().getSprite(c.getFaceDir(),c.getAniIndex()), c.getHitbox().left,c.getHitbox().top,null);
 }
+    public WaveManager getWaveManager(){
+        return waveManager;
+    }
+    public void spawnSkeleton(float spawnX, float spawnY) {
+        synchronized (skeletons) {
+            skeletons.add(new Skeleton(new PointF(spawnX,spawnY)));
+            System.out.println("Spawned skeleton at: (" + spawnX + ", " + spawnY + ")");
 
+        }
 
-
-
-
+    }
 
 }
