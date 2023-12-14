@@ -16,6 +16,8 @@ import android.view.SurfaceHolder;
 
 import com.Groupe4.td_android_projet.Main.MainActivity;
 import com.Groupe4.td_android_projet.R;
+import com.Groupe4.td_android_projet.UI.ButtonImages;
+import com.Groupe4.td_android_projet.UI.CustomButton;
 import com.Groupe4.td_android_projet.entites.Character;
 import com.Groupe4.td_android_projet.Main.GameLoop;
 import com.Groupe4.td_android_projet.entites.enemies.Reptil;
@@ -66,7 +68,7 @@ public class Playing extends BaseState implements GameStateInterface {
     private ArrayList<Knight> knights;
     private ArrayList<Allies> players;
     private ArrayList<Spirit> spirits;
-
+    private CustomButton btnMenu;
     private WaveManager waveManager;
     public Playing(Game game) {
         super(game);
@@ -84,7 +86,7 @@ public class Playing extends BaseState implements GameStateInterface {
         allies= new Allies(new PointF(500,500));
         testMap = new MapManager();
         waveManager = new WaveManager(this);
-
+        btnMenu = new CustomButton(2060, 900, ButtonImages.PLAYING_MENU.getWidth(), ButtonImages.PLAYING_MENU.getHeight());
     }
 
 
@@ -214,36 +216,59 @@ public class Playing extends BaseState implements GameStateInterface {
         //endregion
 
         drawCharacter(c,allies);
+
+        drawUI(c);
         }
 
-
+    private void drawUI(Canvas c) {
+        c.drawBitmap(
+                ButtonImages.PLAYING_MENU.getBtnImg(btnMenu.isPushed()),
+                btnMenu.getHitbox().left,
+                btnMenu.getHitbox().top,
+                null);
+    }
     @Override
     public boolean touchEvents(MotionEvent event) {
 
         x = event.getX();
         y = event.getY();
 
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (isIn(event, btnMenu))
+                btnMenu.setPushed(true);
+        }else if (event.getAction() == MotionEvent.ACTION_UP) {
+            if (isIn(event, btnMenu))
+                if (btnMenu.isPushed())
+                    game.setCurrentGameState(Game.GameState.MENU);
+
+            btnMenu.setPushed(false);
+        }
+
+
+
+
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+
 
                 //region Selection eskimo
                 if (x >= buttonX && x <= buttonX + newWidth && y >= buttonY && y <= buttonY + newHeight) {
                     Log.v("if marche", "TouchEvent : ca marche eskimo");
-                    eskimo_selected= true;
+                    eskimo_selected = true;
                     return true;
                 }
                 //endregion
                 //region Selection spirit
                 if (x >= buttonX2 && x <= buttonX2 + newWidth && y >= buttonY2 && y <= buttonY2 + newHeight) {
                     Log.v("if marche", "TouchEvent : ca marche spirit ");
-                    spirit_selected= true;
+                    spirit_selected = true;
                     return true;
                 }
                 //endregion
                 //region Selection knight
                 if (x >= buttonX3 && x <= buttonX3 + newWidth && y >= buttonY3 && y <= buttonY3 + newHeight) {
                     Log.v("if marche", "TouchEvent : ca marche knight");
-                    knight_selected= true;
+                    knight_selected = true;
                     return true;
                 }
                 //endregion
@@ -256,26 +281,33 @@ public class Playing extends BaseState implements GameStateInterface {
                 break;
 
             case MotionEvent.ACTION_UP:
+
+
+
+
                 // Vérifier si le clic est à l'intérieur des coordonnées de l'image
-                if(eskimo_selected)
-                {
-                    spawnEskimo(x,y);
-                    eskimo_selected=false;
+                if (eskimo_selected) {
+                    spawnEskimo(x, y);
+                    eskimo_selected = false;
                 }
-                if(knight_selected)
-                {
-                    spawnKnight(x,y);
-                    knight_selected=false;
+                if (knight_selected) {
+                    spawnKnight(x, y);
+                    knight_selected = false;
                 }
-                if(spirit_selected)
-                {
-                    spawnSpirit(x,y);
-                    spirit_selected=false;
+                if (spirit_selected) {
+                    spawnSpirit(x, y);
+                    spirit_selected = false;
                 }
 
                 break;
+
+
         }
         return false;
+    }
+
+    private boolean isIn(MotionEvent e, CustomButton b) {
+        return b.getHitbox().contains(e.getX(), e.getY());
     }
     public void drawCharacter(Canvas canvas, Character c){
         canvas.drawBitmap(c.getGameSheetType().getSprite(c.getFaceDir(),c.getAniIndex()), c.getHitbox().left,c.getHitbox().top,null);

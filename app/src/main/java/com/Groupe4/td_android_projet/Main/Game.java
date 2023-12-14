@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
 import com.Groupe4.td_android_projet.Main.GameLoop;
+
 import com.Groupe4.td_android_projet.gamestates.Menu;
 import com.Groupe4.td_android_projet.gamestates.Playing;
 
@@ -43,6 +44,7 @@ public class Game {
                 break;
             case PLAYING : playing.render(c);
                 break;
+
         }
 
         holder.unlockCanvasAndPost(c);
@@ -59,6 +61,9 @@ public class Game {
                break;
            case PLAYING : playing.touchEvents(event);
                break;
+           // case PLAYINGUI : playingUI.touchEvents(event);
+             //   break;
+
         }
 
         return true;
@@ -68,8 +73,11 @@ public class Game {
         gameLoop.startGameLoop();
     }
 
+    public void setPushed(boolean b) {
+    }
+
     public enum GameState {
-        MENU, PLAYING;
+        MENU, PLAYING, PLAYINGUI;
     }
 
     public GameState getCurrentGameState() {
