@@ -58,7 +58,7 @@ public class Menu extends BaseState implements GameStateInterface {
                 if (btnStart.isPushed())
                     game.setCurrentGameState(Game.GameState.PLAYING);
 
-
+            btnStart.setPushed(false);
         }
 
 
