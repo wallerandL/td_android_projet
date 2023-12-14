@@ -33,25 +33,25 @@ public class Reptil extends Character {
 
         switch (faceDir){
             case GameConstants.Face_Dir.DOWN:
-                hitbox.top += delta * 300;
+                hitbox.top += delta * 400;
                 if (hitbox.top >= GAME_HEIGHT)
                     faceDir = GameConstants.Face_Dir.UP;
                 break;
 
             case GameConstants.Face_Dir.UP:
-                hitbox.top -= delta * 300;
+                hitbox.top -= delta * 400;
                 if (hitbox.top <= 0)
                     faceDir = GameConstants.Face_Dir.DOWN;
                 break;
 
             case GameConstants.Face_Dir.RIGHT:
-                hitbox.left += delta * 300;
+                hitbox.left += delta * 400;
                 if (hitbox.left >= GAME_WIDTH)
                     faceDir = GameConstants.Face_Dir.LEFT;
                 break;
 
             case GameConstants.Face_Dir.LEFT:
-                hitbox.left -= delta * 300;
+                hitbox.left -= delta * 400;
                 if (hitbox.left <= 0)
                     faceDir = GameConstants.Face_Dir.RIGHT;
                 break;

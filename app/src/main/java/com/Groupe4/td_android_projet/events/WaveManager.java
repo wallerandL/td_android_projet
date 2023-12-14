@@ -9,9 +9,11 @@ import com.Groupe4.td_android_projet.gamestates.Playing;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 public class WaveManager {
     private Playing playing;
+    private Random rand = new Random();
     private ArrayList<Waves> waves=new ArrayList<>();
     private int enemySpawnTickLimit=60*1;
     private int enemySpawnTick = enemySpawnTickLimit;
@@ -33,7 +35,7 @@ public class WaveManager {
     }
 
     private void creatWaves() {
-        waves.add(new Waves(new ArrayList<Integer>(Arrays.asList(SKELLETON,SKELLETON,REPTIL))));
+        waves.add(new Waves(new ArrayList<Integer>(Arrays.asList(rand.nextInt(2),rand.nextInt(2),rand.nextInt(2),rand.nextInt(2)))));
     }
 
     public ArrayList<Waves> getWaves(){
