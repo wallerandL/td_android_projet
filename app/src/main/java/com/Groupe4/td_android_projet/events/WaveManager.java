@@ -1,5 +1,6 @@
 package com.Groupe4.td_android_projet.events;
 
+import static com.Groupe4.td_android_projet.helpers.GameConstants.Enemies.REPTIL;
 import static com.Groupe4.td_android_projet.helpers.GameConstants.Enemies.SKELLETON;
 
 import android.annotation.SuppressLint;
@@ -10,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class WaveManager {
-    public boolean isTimeForNewEnemy;
     private Playing playing;
     private ArrayList<Waves> waves=new ArrayList<>();
     private int enemySpawnTickLimit=60*1;
@@ -33,13 +33,13 @@ public class WaveManager {
     }
 
     private void creatWaves() {
-        waves.add(new Waves(new ArrayList<Integer>(Arrays.asList(SKELLETON,SKELLETON))));
+        waves.add(new Waves(new ArrayList<Integer>(Arrays.asList(SKELLETON,SKELLETON,REPTIL))));
     }
 
     public ArrayList<Waves> getWaves(){
         return waves;
     }
-    public boolean isTimeForNewEnemy(){
+    public boolean isTimeForNewEnemyq(){
         return enemySpawnTick>=enemySpawnTickLimit;
     }
     public boolean isThereMoreEnemiesInWaves(){

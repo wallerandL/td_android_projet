@@ -2,6 +2,8 @@ package com.Groupe4.td_android_projet.gamestates;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
+import static com.Groupe4.td_android_projet.helpers.GameConstants.Enemies.REPTIL;
 import static com.Groupe4.td_android_projet.helpers.GameConstants.Enemies.SKELLETON;
 
 import android.graphics.Canvas;
@@ -16,7 +18,11 @@ import com.Groupe4.td_android_projet.Main.MainActivity;
 import com.Groupe4.td_android_projet.R;
 import com.Groupe4.td_android_projet.entites.Character;
 import com.Groupe4.td_android_projet.Main.GameLoop;
+import com.Groupe4.td_android_projet.entites.enemies.Reptil;
 import com.Groupe4.td_android_projet.entites.enemies.Skeleton;
+import com.Groupe4.td_android_projet.entites.tours.EskimoNinja;
+import com.Groupe4.td_android_projet.entites.tours.Knight;
+import com.Groupe4.td_android_projet.entites.tours.Spirit;
 import com.Groupe4.td_android_projet.events.WaveManager;
 import com.Groupe4.td_android_projet.entites.tours.Allies;
 import com.Groupe4.td_android_projet.environement.MapManager;
@@ -32,6 +38,7 @@ public class Playing extends BaseState implements GameStateInterface {
     private Paint redPaint = new Paint();
 
     private Random rand = new Random();
+    boolean eskimo_selected, knight_selected, spirit_selected, player_selected;
     private Paint yellowPaint = new Paint();
     private boolean movePlayer;
     private SurfaceHolder holder;
@@ -42,21 +49,38 @@ public class Playing extends BaseState implements GameStateInterface {
     private GameLoop gameLoop;
     private MapManager testMap;
     private Skeleton skeleton;
+    private Reptil reptil;
+    float x,y;
     private Allies allies;
+    private Knight knight;
+    private Spirit spirit;
+    private EskimoNinja eskimoNinja;
 
-    private int decalage_y__selection_tour = 200;
+    private int decalage_y_selection_tour = 200;
 
 
 
     private ArrayList<Skeleton> skeletons;
+    private ArrayList<Reptil> reptils;
+    private ArrayList<EskimoNinja> eskimoNinjas;
+    private ArrayList<Knight> knights;
+    private ArrayList<Allies> players;
+    private ArrayList<Spirit> spirits;
+
     private WaveManager waveManager;
     public Playing(Game game) {
         super(game);
 
         skeletons = new ArrayList<>();
+        reptils = new ArrayList<>();
+        eskimoNinjas = new ArrayList<>();
+        knights = new ArrayList<>();
+        spirits = new ArrayList<>();
+        players = new ArrayList<>();
         redPaint.setColor(Color.RED);
         yellowPaint.setColor(Color.rgb(255,140,0));
         skeleton = new Skeleton(new PointF(rand.nextInt(2220), rand.nextInt(1080)));
+        reptil = new Reptil(new PointF(rand.nextInt(2220), rand.nextInt(1080)));
         allies= new Allies(new PointF(500,500));
         testMap = new MapManager();
         waveManager = new WaveManager(this);
@@ -74,8 +98,13 @@ public class Playing extends BaseState implements GameStateInterface {
         skeleton.update(delta);
         for (Skeleton skeleton : skeletons)
             skeleton.update(delta);
+        reptil.update(delta);
+        for (Reptil reptil : reptils)
+            reptil.update(delta);
 
     }
+
+    //region vagues
     private void updateWaveManager(){
         this.getWaveManager().update();
     }
@@ -89,23 +118,27 @@ public class Playing extends BaseState implements GameStateInterface {
             case SKELLETON:
                 spawnSkeleton(rand.nextInt(2220), rand.nextInt(1080));
                 break;
+            case REPTIL:
+                spawnReptil(rand.nextInt(2220), rand.nextInt(1080));
+                break;
         }
     }
 
     private boolean isTimeForNewEnemy() {
         Log.d("isTimeForNewEnemy", "Adding enemy of type: ");
-        if(this.getWaveManager().isThereMoreEnemiesInWaves()){
+        if(this.getWaveManager().isThereMoreEnemiesInWaves() && this.getWaveManager().isTimeForNewEnemyq()){
                 Log.d("isTimeForNewEnemy3", "Adding enemy of type: ");
                 return true;
         }
-
         return false;
     }
+    //endregion
 
     @Override
     public void render(Canvas c) {
         testMap.draw(c);
 
+        //region ajout bar orange
         float stripeWidth = 200f; // ajustez la largeur de la bande selon vos besoins
         float screenWidth = c.getWidth();
         float stripeLeft = screenWidth - stripeWidth;
@@ -113,8 +146,25 @@ public class Playing extends BaseState implements GameStateInterface {
         float stripeRight = screenWidth;
         float stripeBottom = c.getHeight();
         c.drawRect(stripeLeft,stripeTop, stripeRight, stripeBottom, yellowPaint);
+        //endregion
+
+        //region draw tour / ennemies
         for (Skeleton skeleton : skeletons)
             drawCharacter(c, skeleton);
+
+        for (Reptil reptil : reptils)
+            drawCharacter(c, reptil);
+
+        for(EskimoNinja e : eskimoNinjas)
+            drawCharacter(c, e);
+
+        for(Knight k : knights)
+            drawCharacter(c, k);
+
+        for(Spirit s : spirits)
+            drawCharacter(c, s);
+        //endregion
+
 
         c.drawRect(stripeLeft, stripeTop, stripeRight, stripeBottom, yellowPaint);
 
@@ -142,7 +192,7 @@ public class Playing extends BaseState implements GameStateInterface {
 
         // Ajuster la position du bouton à l'intérieur du rectangle
         buttonX2 = stripeLeft + 40; // Décalage de 10 pixels vers la gauche
-        buttonY2 = stripeTop + decalage_y__selection_tour + 30;
+        buttonY2 = stripeTop + decalage_y_selection_tour + 30;
 
         // Dessiner l'image redimensionnée dans le rectangle
         c.drawBitmap(Bitmap.createScaledBitmap(buttonImage2, newWidth, newHeight, false),
@@ -156,7 +206,7 @@ public class Playing extends BaseState implements GameStateInterface {
 
         // Ajuster la position du bouton à l'intérieur du rectangle
         buttonX3 = stripeLeft + 40; // Décalage de 10 pixels vers la gauche
-        buttonY3 = stripeTop + 2*decalage_y__selection_tour + 30;
+        buttonY3 = stripeTop + 2* decalage_y_selection_tour + 30;
 
         // Dessiner l'image redimensionnée dans le rectangle
         c.drawBitmap(Bitmap.createScaledBitmap(buttonImage3, newWidth, newHeight, false),
@@ -170,11 +220,34 @@ public class Playing extends BaseState implements GameStateInterface {
     @Override
     public boolean touchEvents(MotionEvent event) {
 
-        float x = event.getX();
-        float y = event.getY();
+        x = event.getX();
+        y = event.getY();
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+
+                //region Selection eskimo
+                if (x >= buttonX && x <= buttonX + newWidth && y >= buttonY && y <= buttonY + newHeight) {
+                    Log.v("if marche", "TouchEvent : ca marche eskimo");
+                    eskimo_selected= true;
+                    return true;
+                }
+                //endregion
+                //region Selection spirit
+                if (x >= buttonX2 && x <= buttonX2 + newWidth && y >= buttonY2 && y <= buttonY2 + newHeight) {
+                    Log.v("if marche", "TouchEvent : ca marche spirit ");
+                    spirit_selected= true;
+                    return true;
+                }
+                //endregion
+                //region Selection knight
+                if (x >= buttonX3 && x <= buttonX3 + newWidth && y >= buttonY3 && y <= buttonY3 + newHeight) {
+                    Log.v("if marche", "TouchEvent : ca marche knight");
+                    knight_selected= true;
+                    return true;
+                }
+                //endregion
+
                 break;
 
             // Ajoutez d'autres cas selon vos besoins, par exemple, ACTION_MOVE, ACTION_UP, etc.
@@ -184,19 +257,26 @@ public class Playing extends BaseState implements GameStateInterface {
 
             case MotionEvent.ACTION_UP:
                 // Vérifier si le clic est à l'intérieur des coordonnées de l'image
-
-                //region Selection eskimo
-                if (x >= buttonX && x <= buttonX + newWidth && y >= buttonY && y <= buttonY + newHeight) {
-                    Log.v("if marche", "TouchEvent : ca marche");
-                    return true;
+                if(eskimo_selected)
+                {
+                    spawnEskimo(x,y);
+                    eskimo_selected=false;
                 }
-                //endregion
+                if(knight_selected)
+                {
+                    spawnKnight(x,y);
+                    knight_selected=false;
+                }
+                if(spirit_selected)
+                {
+                    spawnSpirit(x,y);
+                    spirit_selected=false;
+                }
 
                 break;
         }
         return false;
     }
-
     public void drawCharacter(Canvas canvas, Character c){
         canvas.drawBitmap(c.getGameSheetType().getSprite(c.getFaceDir(),c.getAniIndex()), c.getHitbox().left,c.getHitbox().top,null);
 }
@@ -207,6 +287,38 @@ public class Playing extends BaseState implements GameStateInterface {
         synchronized (skeletons) {
             skeletons.add(new Skeleton(new PointF(spawnX,spawnY)));
             System.out.println("Spawned skeleton at: (" + spawnX + ", " + spawnY + ")");
+
+        }
+
+    }
+    public void spawnReptil(float spawnX, float spawnY) {
+        synchronized (reptils) {
+            reptils.add(new Reptil(new PointF(spawnX,spawnY)));
+            System.out.println("Spawned reptil at: (" + spawnX + ", " + spawnY + ")");
+
+        }
+
+    }
+    public void spawnEskimo(float localx, float localy) {
+        synchronized (eskimoNinjas) {
+            eskimoNinjas.add(new EskimoNinja(new PointF(localx,localy)));
+            System.out.println("Spawned eskimo at: (" + localx + ", " + localy + ")");
+
+        }
+
+    }
+    public void spawnKnight(float localx, float localy) {
+        synchronized (knights) {
+            knights.add(new Knight(new PointF(localx,localy)));
+            System.out.println("Spawned knight at: (" + localx + ", " + localy + ")");
+
+        }
+
+    }
+    public void spawnSpirit(float localx, float localy) {
+        synchronized (spirits) {
+            spirits.add(new Spirit(new PointF(localx,localy)));
+            System.out.println("Spawned spirit at: (" + localx + ", " + localy + ")");
 
         }
 
