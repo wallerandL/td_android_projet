@@ -85,7 +85,7 @@ public class Playing extends BaseState implements GameStateInterface {
         spirits = new ArrayList<>();
         players = new ArrayList<>();
         redPaint.setColor(Color.RED);
-        yellowPaint.setStyle(Paint.Style.STROKE);
+        redPaint.setStyle(Paint.Style.STROKE);
         yellowPaint.setColor(Color.rgb(255,140,0));
         skeleton = new Skeleton(new PointF(rand.nextInt(2220), rand.nextInt(1080)));
         reptil = new Reptil(new PointF(rand.nextInt(2220), rand.nextInt(1080)));
@@ -417,7 +417,7 @@ public class Playing extends BaseState implements GameStateInterface {
                     null);
 
 
-            c.drawRect(attackBox, yellowPaint);
+            c.drawRect(attackBox, redPaint);
 
         }
     }
@@ -433,7 +433,7 @@ public class Playing extends BaseState implements GameStateInterface {
             }
 
         }
-        canvas.drawRect(c.getHitbox(),yellowPaint);
+        canvas.drawRect(c.getHitbox(),redPaint);
 }
     public WaveManager getWaveManager(){
         return waveManager;
