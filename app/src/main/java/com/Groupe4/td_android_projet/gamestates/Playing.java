@@ -186,8 +186,8 @@ public class Playing extends BaseState implements GameStateInterface {
                     new PointF(k.getHitbox().left + 1.75f * GameConstants.Sprite.SCALE_MULTIPLIER,
                     k.getHitbox().top - Weapons.BIG_SWORD.getHeight());
 
-            case GameConstants.Face_Dir.DOWN ->new PointF(k.getHitbox().left + 2.5f * GameConstants.Sprite.SCALE_MULTIPLIER,
-                    k.getHitbox().bottom);
+            case GameConstants.Face_Dir.DOWN ->new PointF(k.getHitbox().left + 5f * GameConstants.Sprite.SCALE_MULTIPLIER,
+                    k.getHitbox().bottom + 15f * GameConstants.Sprite.SCALE_MULTIPLIER);
 
             case GameConstants.Face_Dir.LEFT -> new PointF(k.getHitbox().left - Weapons.BIG_SWORD.getHeight(),
                     k.getHitbox().bottom - Weapons.BIG_SWORD.getWidth() - 0.75f * GameConstants.Sprite.SCALE_MULTIPLIER);
@@ -410,12 +410,16 @@ public class Playing extends BaseState implements GameStateInterface {
 
     private void drawWeapon(Canvas c, Knight k)
     {
-        c.drawBitmap(Weapons.BIG_SWORD.getWeaponImg(),
-                k.getHitbox().left,
-                k.getHitbox().top,
-                null);
+        if(attackBox != null){
+            c.drawBitmap(Weapons.BIG_SWORD.getWeaponImg(),
+                    attackBox.left,
+                    attackBox.top,
+                    null);
 
-        c.drawRect(attackBox, yellowPaint);
+
+            c.drawRect(attackBox, yellowPaint);
+
+        }
     }
 
     public void drawCharacter(Canvas canvas, Character c){
