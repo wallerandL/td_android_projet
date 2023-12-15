@@ -10,6 +10,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.RectF;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -20,6 +21,7 @@ import com.Groupe4.td_android_projet.UI.ButtonImages;
 import com.Groupe4.td_android_projet.UI.CustomButton;
 import com.Groupe4.td_android_projet.entites.Character;
 import com.Groupe4.td_android_projet.Main.GameLoop;
+import com.Groupe4.td_android_projet.entites.Weapons;
 import com.Groupe4.td_android_projet.entites.enemies.Reptil;
 import com.Groupe4.td_android_projet.entites.enemies.Skeleton;
 import com.Groupe4.td_android_projet.entites.tours.EskimoNinja;
@@ -29,6 +31,7 @@ import com.Groupe4.td_android_projet.events.WaveManager;
 import com.Groupe4.td_android_projet.entites.tours.Allies;
 import com.Groupe4.td_android_projet.environement.MapManager;
 import com.Groupe4.td_android_projet.Main.Game;
+import com.Groupe4.td_android_projet.helpers.GameConstants;
 import com.Groupe4.td_android_projet.helpers.interfaces.GameStateInterface;
 
 import java.util.ArrayList;
@@ -37,39 +40,41 @@ import java.util.Random;
 
 public class Playing extends BaseState implements GameStateInterface {
 
-    private Paint redPaint = new Paint();
+    private final Paint redPaint = new Paint();
 
-    private Random rand = new Random();
+    private final Random rand = new Random();
     boolean eskimo_selected, knight_selected, spirit_selected, player_selected;
-    private Paint yellowPaint = new Paint();
+    private final Paint yellowPaint = new Paint();
     private boolean movePlayer;
     private SurfaceHolder holder;
     private float buttonX,buttonY,buttonX2,buttonY2,buttonX3,buttonY3;
     private int newWidth, newHeight;
-    private ArrayList<PointF> sqarePos = new ArrayList<>() ;
+    private final ArrayList<PointF> sqarePos = new ArrayList<>() ;
 
     private GameLoop gameLoop;
-    private MapManager testMap;
-    private Skeleton skeleton;
-    private Reptil reptil;
+    private final MapManager testMap;
+    private final Skeleton skeleton;
+    private final Reptil reptil;
     float x,y;
-    private Allies allies;
+    private final Allies allies;
     private Knight knight;
     private Spirit spirit;
     private EskimoNinja eskimoNinja;
 
-    private int decalage_y_selection_tour = 200;
+    private final int decalage_y_selection_tour = 200;
 
 
 
-    private ArrayList<Skeleton> skeletons;
-    private ArrayList<Reptil> reptils;
-    private ArrayList<EskimoNinja> eskimoNinjas;
-    private ArrayList<Knight> knights;
-    private ArrayList<Allies> players;
-    private ArrayList<Spirit> spirits;
-    private CustomButton btnMenu;
-    private WaveManager waveManager;
+    private final ArrayList<Skeleton> skeletons;
+    private final ArrayList<Reptil> reptils;
+    private final ArrayList<EskimoNinja> eskimoNinjas;
+    private final ArrayList<Knight> knights;
+    private final ArrayList<Allies> players;
+    private final ArrayList<Spirit> spirits;
+    private final CustomButton btnMenu;
+    private final WaveManager waveManager;
+    private RectF attackBox;
+
     public Playing(Game game) {
         super(game);
 
@@ -80,6 +85,7 @@ public class Playing extends BaseState implements GameStateInterface {
         spirits = new ArrayList<>();
         players = new ArrayList<>();
         redPaint.setColor(Color.RED);
+        yellowPaint.setStyle(Paint.Style.STROKE);
         yellowPaint.setColor(Color.rgb(255,140,0));
         skeleton = new Skeleton(new PointF(rand.nextInt(2220), rand.nextInt(1080)));
         reptil = new Reptil(new PointF(rand.nextInt(2220), rand.nextInt(1080)));
@@ -97,12 +103,78 @@ public class Playing extends BaseState implements GameStateInterface {
             spawnEnemy();
         }
 
+        for(Knight k : knights )
+        {
+            updateWebHitbox(k);
+        }
         skeleton.update(delta);
         for (Skeleton skeleton : skeletons)
             skeleton.update(delta);
         reptil.update(delta);
         for (Reptil reptil : reptils)
             reptil.update(delta);
+
+    }
+
+    private void updateWebHitbox(Knight k) {
+        PointF pos = getWepPos(k);
+        float w = getWepWidth(k);
+        float h = getWepHeight(k);
+
+        attackBox = new RectF(pos.x, pos.y, pos.x+ w,pos.y+h);
+
+    }
+
+    private float getWepWidth(Knight k) {
+
+        return switch(k.getFaceDir()){
+            case GameConstants.Face_Dir.LEFT , GameConstants.Face_Dir.RIGHT ->
+                    Weapons.BIG_SWORD.getHeight();
+
+            case GameConstants.Face_Dir.UP, GameConstants.Face_Dir.DOWN ->
+                    Weapons.BIG_SWORD.getWidth();
+
+            default -> throw new IllegalStateException("Unexpected Value : " + k.getFaceDir());
+
+        };
+    }
+
+    private float getWepHeight(Knight k) {
+        return switch(k.getFaceDir()){
+            case GameConstants.Face_Dir.UP , GameConstants.Face_Dir.DOWN ->
+                    Weapons.BIG_SWORD.getHeight();
+
+            case GameConstants.Face_Dir.LEFT, GameConstants.Face_Dir.RIGHT ->
+                Weapons.BIG_SWORD.getWidth();
+
+            default -> throw new IllegalStateException("Unexpected Value : " + k.getFaceDir());
+
+        };
+    }
+
+    private PointF getWepPos(Knight k) {
+
+        return switch(k.getFaceDir())
+        {
+            case GameConstants.Face_Dir.UP ->
+                    new PointF(k.getHitbox().left + 1.75f * GameConstants.Sprite.SCALE_MULTIPLIER,
+                    k.getHitbox().top - Weapons.BIG_SWORD.getHeight());
+
+            case GameConstants.Face_Dir.DOWN ->new PointF(k.getHitbox().left + 2.5f * GameConstants.Sprite.SCALE_MULTIPLIER,
+                    k.getHitbox().bottom);
+
+            case GameConstants.Face_Dir.LEFT -> new PointF(k.getHitbox().left - Weapons.BIG_SWORD.getHeight(),
+                    k.getHitbox().bottom - Weapons.BIG_SWORD.getWidth() - 0.75f * GameConstants.Sprite.SCALE_MULTIPLIER);
+
+            case GameConstants.Face_Dir.RIGHT ->
+                new PointF(k.getHitbox().right,
+                        k.getHitbox().bottom - Weapons.BIG_SWORD.getWidth() - 0.75f * GameConstants.Sprite.SCALE_MULTIPLIER);
+
+            default -> throw new IllegalStateException("Unexpected value : " + k.getFaceDir());
+
+
+        };
+
 
     }
 
@@ -309,12 +381,36 @@ public class Playing extends BaseState implements GameStateInterface {
     private boolean isIn(MotionEvent e, CustomButton b) {
         return b.getHitbox().contains(e.getX(), e.getY());
     }
+
+
+    private void drawWeapon(Canvas c, Knight k)
+    {
+        c.drawBitmap(Weapons.BIG_SWORD.getWeaponImg(),
+                k.getHitbox().left,
+                k.getHitbox().top,
+                null);
+
+        c.drawRect(attackBox, yellowPaint);
+    }
+
     public void drawCharacter(Canvas canvas, Character c){
         canvas.drawBitmap(c.getGameSheetType().getSprite(c.getFaceDir(),c.getAniIndex()), c.getHitbox().left,c.getHitbox().top,null);
+        if(c instanceof Knight){
+
+            Knight k = (Knight) c;
+
+            if(k != null){
+                drawWeapon(canvas, k);
+            }
+
+        }
+        canvas.drawRect(c.getHitbox(),yellowPaint);
 }
     public WaveManager getWaveManager(){
         return waveManager;
     }
+
+    //region Méthodes spawn
     public void spawnSkeleton(float spawnX, float spawnY) {
         synchronized (skeletons) {
             skeletons.add(new Skeleton(new PointF(spawnX,spawnY)));
@@ -355,5 +451,5 @@ public class Playing extends BaseState implements GameStateInterface {
         }
 
     }
-
+    //endregion
 }
