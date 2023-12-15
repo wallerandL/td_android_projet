@@ -31,14 +31,20 @@ public class Knight extends Character {
     public void drawWeapon(Canvas c, Knight k)
     {
         if(attackBox != null){
+
+            c.save(); // sauvegarde du canvas pour ne pas tourner tous les éléments
+
+            c.rotate(90, attackBox.left, attackBox.top); // rotation de l'attack box
             c.drawBitmap(Weapons.BIG_SWORD.getWeaponImg(),
                     attackBox.left,
                     attackBox.top,
                     null);
+            c.rotate(-90, attackBox.left, attackBox.top);
 
 
             c.drawRect(attackBox, redPaint);
 
+            c.restore(); // restoration du canvas pour remettre les éléments tournés à la bonne rotation
         }
     }
     public void updateWebHitbox() {
