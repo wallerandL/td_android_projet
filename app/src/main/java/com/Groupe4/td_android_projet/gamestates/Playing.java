@@ -105,7 +105,7 @@ public class Playing extends BaseState implements GameStateInterface {
 
         for(Knight k : knights )
         {
-            updateWebHitbox(k);
+            k.updateWebHitbox();
         }
         skeleton.update(delta);
         for (Skeleton skeleton : skeletons)
@@ -140,68 +140,6 @@ public class Playing extends BaseState implements GameStateInterface {
     public void kill(){
         skeletons.clear();
         reptils.clear();
-    }
-
-    private void updateWebHitbox(Knight k) {
-        PointF pos = getWepPos(k);
-        float w = getWepWidth(k);
-        float h = getWepHeight(k);
-
-        attackBox = new RectF(pos.x, pos.y, pos.x+ w,pos.y+h);
-
-    }
-
-    private float getWepWidth(Knight k) {
-
-        return switch(k.getFaceDir()){
-            case GameConstants.Face_Dir.LEFT , GameConstants.Face_Dir.RIGHT ->
-                    Weapons.BIG_SWORD.getHeight();
-
-            case GameConstants.Face_Dir.UP, GameConstants.Face_Dir.DOWN ->
-                    Weapons.BIG_SWORD.getWidth();
-
-            default -> throw new IllegalStateException("Unexpected Value : " + k.getFaceDir());
-
-        };
-    }
-
-    private float getWepHeight(Knight k) {
-        return switch(k.getFaceDir()){
-            case GameConstants.Face_Dir.UP , GameConstants.Face_Dir.DOWN ->
-                    Weapons.BIG_SWORD.getHeight();
-
-            case GameConstants.Face_Dir.LEFT, GameConstants.Face_Dir.RIGHT ->
-                Weapons.BIG_SWORD.getWidth();
-
-            default -> throw new IllegalStateException("Unexpected Value : " + k.getFaceDir());
-
-        };
-    }
-
-    private PointF getWepPos(Knight k) {
-
-        return switch(k.getFaceDir())
-        {
-            case GameConstants.Face_Dir.UP ->
-                    new PointF(k.getHitbox().left + 1.75f * GameConstants.Sprite.SCALE_MULTIPLIER,
-                    k.getHitbox().top - Weapons.BIG_SWORD.getHeight());
-
-            case GameConstants.Face_Dir.DOWN ->new PointF(k.getHitbox().left + 5f * GameConstants.Sprite.SCALE_MULTIPLIER,
-                    k.getHitbox().bottom + 15f * GameConstants.Sprite.SCALE_MULTIPLIER);
-
-            case GameConstants.Face_Dir.LEFT -> new PointF(k.getHitbox().left - Weapons.BIG_SWORD.getHeight(),
-                    k.getHitbox().bottom - Weapons.BIG_SWORD.getWidth() - 0.75f * GameConstants.Sprite.SCALE_MULTIPLIER);
-
-            case GameConstants.Face_Dir.RIGHT ->
-                new PointF(k.getHitbox().right,
-                        k.getHitbox().bottom - Weapons.BIG_SWORD.getWidth() - 0.75f * GameConstants.Sprite.SCALE_MULTIPLIER);
-
-            default -> throw new IllegalStateException("Unexpected value : " + k.getFaceDir());
-
-
-        };
-
-
     }
 
     //region vagues
@@ -407,21 +345,6 @@ public class Playing extends BaseState implements GameStateInterface {
         return b.getHitbox().contains(e.getX(), e.getY());
     }
 
-
-    private void drawWeapon(Canvas c, Knight k)
-    {
-        if(attackBox != null){
-            c.drawBitmap(Weapons.BIG_SWORD.getWeaponImg(),
-                    attackBox.left,
-                    attackBox.top,
-                    null);
-
-
-            c.drawRect(attackBox, redPaint);
-
-        }
-    }
-
     public void drawCharacter(Canvas canvas, Character c){
         canvas.drawBitmap(c.getGameSheetType().getSprite(c.getFaceDir(),c.getAniIndex()), c.getHitbox().left,c.getHitbox().top,null);
         if(c instanceof Knight){
@@ -429,7 +352,7 @@ public class Playing extends BaseState implements GameStateInterface {
             Knight k = (Knight) c;
 
             if(k != null){
-                drawWeapon(canvas, k);
+                k.drawWeapon(canvas, k);
             }
 
         }
