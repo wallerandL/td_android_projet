@@ -104,6 +104,32 @@ public class Playing extends BaseState implements GameStateInterface {
         for (Reptil reptil : reptils)
             reptil.update(delta);
 
+        if (isAllEnemiesDead()){
+            if (isThereMoreWaves()){
+                waveManager.increaseWaveIndex();
+                waveManager.resetEnemyIndex();
+            }
+        }
+
+    }
+
+    private boolean isThereMoreWaves() {
+        return WaveManager.isTherMoreWaves();
+    }
+
+    private boolean isAllEnemiesDead() {
+        if (skeletons.isEmpty() && reptils.isEmpty()){
+            if (waveManager.isThereMoreEnemiesInWaves()){
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public void kill(){
+        skeletons.clear();
+        reptils.clear();
     }
 
     //region vagues
@@ -215,8 +241,6 @@ public class Playing extends BaseState implements GameStateInterface {
                 buttonX3, buttonY3, yellowPaint);
         //endregion
 
-        drawCharacter(c,allies);
-
         drawUI(c);
         }
 
@@ -234,6 +258,7 @@ public class Playing extends BaseState implements GameStateInterface {
         y = event.getY();
 
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            kill();
             if (isIn(event, btnMenu))
                 btnMenu.setPushed(true);
         }else if (event.getAction() == MotionEvent.ACTION_UP) {

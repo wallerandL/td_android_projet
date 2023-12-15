@@ -14,13 +14,23 @@ import java.util.Random;
 public class WaveManager {
     private Playing playing;
     private Random rand = new Random();
-    private ArrayList<Waves> waves=new ArrayList<>();
+    private static ArrayList<Waves> waves=new ArrayList<>();
     private int enemySpawnTickLimit=60*1;
     private int enemySpawnTick = enemySpawnTickLimit;
-    private int enemyIndex,waveIndex;
+    private int enemyIndex;
+    private static int waveIndex;
     public WaveManager(Playing playing){
         this.playing=playing;
         creatWaves();
+    }
+
+    public static boolean isTherMoreWaves() {
+        return waveIndex +1 < waves.size();
+    }
+
+    public void increaseWaveIndex(){
+        waveIndex++;
+
     }
 
     @SuppressLint("SuspiciousIndentation")
@@ -35,6 +45,7 @@ public class WaveManager {
     }
 
     private void creatWaves() {
+        waves.add(new Waves(new ArrayList<Integer>(Arrays.asList(1,1,1))));
         waves.add(new Waves(new ArrayList<Integer>(Arrays.asList(rand.nextInt(2),rand.nextInt(2),rand.nextInt(2),rand.nextInt(2)))));
     }
 
@@ -46,5 +57,9 @@ public class WaveManager {
     }
     public boolean isThereMoreEnemiesInWaves(){
         return enemyIndex < waves.get(waveIndex).getEnemyList().size();
+    }
+
+    public void resetEnemyIndex() {
+        enemyIndex=0;
     }
 }
