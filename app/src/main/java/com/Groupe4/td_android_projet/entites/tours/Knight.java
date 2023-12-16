@@ -12,10 +12,14 @@ import com.Groupe4.td_android_projet.entites.Weapons;
 import com.Groupe4.td_android_projet.helpers.GameConstants;
 
 public class Knight extends Character {
+    public RectF getAttackBox() {
+        return attackBox;
+    }
+
     protected RectF attackBox;
     private final Paint redPaint = new Paint();
     int compteFace = 0;
-    boolean testRotation = true;
+    boolean Rotation = true;
 
 
     public Knight(PointF pos)
@@ -82,7 +86,7 @@ public class Knight extends Character {
 
     public void updateWebHitbox() {
 
-        if(testRotation)
+        if(Rotation)
         {
             //region Test rotation chevalier
             if (compteFace % 100 == 25) {

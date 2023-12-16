@@ -13,9 +13,11 @@ import java.util.Random;
 public class Skeleton extends Character {
     private long lastDirChange = System.currentTimeMillis();
     private Random rand = new Random();
+    public int invincibilityFrame;
 
     public Skeleton(PointF pos) {
         super(pos, GameSheet.SKELETON);
+        this.invincibilityFrame = 10;
     }
 
     public void update(double delta){

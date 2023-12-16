@@ -35,6 +35,7 @@ import com.Groupe4.td_android_projet.helpers.GameConstants;
 import com.Groupe4.td_android_projet.helpers.interfaces.GameStateInterface;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 
@@ -74,7 +75,6 @@ public class Playing extends BaseState implements GameStateInterface {
     private final CustomButton btnMenu;
     private final WaveManager waveManager;
     private RectF attackBox;
-
     public Playing(Game game) {
         super(game);
 
@@ -103,16 +103,26 @@ public class Playing extends BaseState implements GameStateInterface {
             spawnEnemy();
         }
 
+        checkAttack();
         for(Knight k : knights )
         {
             k.updateWebHitbox();
         }
         skeleton.update(delta);
-        for (Skeleton skeleton : skeletons)
-            skeleton.update(delta);
+        for (Skeleton skeleton : skeletons){
+            if(skeleton.isActive()){
+                skeleton.update(delta);
+
+            }
+
+        }
         reptil.update(delta);
-        for (Reptil reptil : reptils)
-            reptil.update(delta);
+        for (Reptil reptil : reptils){
+            if(reptil.isActive()){
+                reptil.update(delta);
+
+            }
+        }
 
         if (isAllEnemiesDead()){
             if (isThereMoreWaves()){
@@ -120,7 +130,48 @@ public class Playing extends BaseState implements GameStateInterface {
                 waveManager.resetEnemyIndex();
             }
         }
+        NettoyageTableau(skeletons);
+        NettoyageTableau(reptils);
 
+    }
+
+    private <T extends Character> void NettoyageTableau(ArrayList<T> characters) {
+        Iterator<T> iterator = characters.iterator();
+
+        while (iterator.hasNext()) {
+            T character = iterator.next();
+
+            if (!character.isActive()) {
+                iterator.remove();
+            }
+        }
+    }
+
+    private void checkAttack() {
+        for(Knight k : knights){
+            if(k.getAttackBox() != null) {
+                for(Skeleton skel : skeletons)
+                {
+                    if (k.getAttackBox().intersects(skel.getHitbox().left, skel.getHitbox().top, skel.getHitbox().right, skel.getHitbox().bottom))
+                    {
+                        if(skel.invincibilityFrame != 0)
+                            skel.invincibilityFrame--;
+                        else
+                            skel.setActive(false);
+                    }
+                }
+
+
+                for(Reptil rept : reptils)
+                {
+                    if (k.getAttackBox().intersects(rept.getHitbox().left, rept.getHitbox().top, rept.getHitbox().right, rept.getHitbox().bottom))
+                    {
+                        addEnemy(SKELLETON, rept.getHitbox().left, rept.getHitbox().top);
+                        rept.setActive(false);
+                    }
+                }
+            }
+        }
     }
 
     private boolean isThereMoreWaves() {
@@ -148,22 +199,22 @@ public class Playing extends BaseState implements GameStateInterface {
     }
 
     private void spawnEnemy() {
-        addEnemy(this.getWaveManager().getNextEnemy());
+        addEnemy(this.getWaveManager().getNextEnemy(), 0,800);
     }
-    public void addEnemy(int enemyType) {
+    public void addEnemy(int enemyType, float x, float y) {
         Log.d("Playing", "Adding enemy of type: " + enemyType);
         switch (enemyType) {
             case SKELLETON:
-                spawnSkeleton(rand.nextInt(2220), rand.nextInt(1080));
+                spawnSkeleton(x,y);
                 break;
             case REPTIL:
-                spawnReptil(rand.nextInt(2220), rand.nextInt(1080));
+                spawnReptil(0,800);
                 break;
         }
     }
 
     private boolean isTimeForNewEnemy() {
-        Log.d("isTimeForNewEnemy", "Adding enemy of type: ");
+        //Log.d("isTimeForNewEnemy", "Adding enemy of type: ");
         if(this.getWaveManager().isThereMoreEnemiesInWaves() && this.getWaveManager().isTimeForNewEnemyq()){
                 Log.d("isTimeForNewEnemy3", "Adding enemy of type: ");
                 return true;
@@ -188,10 +239,12 @@ public class Playing extends BaseState implements GameStateInterface {
 
         //region draw tour / ennemies
         for (Skeleton skeleton : skeletons)
-            drawCharacter(c, skeleton);
+            if(skeleton.isActive())
+                drawCharacter(c, skeleton);
 
         for (Reptil reptil : reptils)
-            drawCharacter(c, reptil);
+            if(reptil.isActive())
+                drawCharacter(c, reptil);
 
         for(EskimoNinja e : eskimoNinjas)
             drawCharacter(c, e);
@@ -268,7 +321,7 @@ public class Playing extends BaseState implements GameStateInterface {
         y = event.getY();
 
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            kill();
+            //kill();
             if (isIn(event, btnMenu))
                 btnMenu.setPushed(true);
         }else if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -310,7 +363,6 @@ public class Playing extends BaseState implements GameStateInterface {
 
                 break;
 
-            // Ajoutez d'autres cas selon vos besoins, par exemple, ACTION_MOVE, ACTION_UP, etc.
 
             case MotionEvent.ACTION_MOVE:
                 break;
@@ -354,7 +406,6 @@ public class Playing extends BaseState implements GameStateInterface {
             Knight k = (Knight) c;
 
             if(k != null){
-                Log.d("hitbox chevalier", String.valueOf(k.getHitbox()));
                 k.drawWeapon(canvas);
             }
 
