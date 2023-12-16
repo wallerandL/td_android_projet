@@ -15,7 +15,7 @@ public class Knight extends Character {
     protected RectF attackBox;
     private final Paint redPaint = new Paint();
     int compteFace = 0;
-    boolean testRotation;
+    boolean testRotation = true;
 
 
     public Knight(PointF pos)
@@ -37,8 +37,8 @@ public class Knight extends Character {
 
             c.rotate(getWepRot(), attackBox.left, attackBox.top); // rotation de l'attack box
             c.drawBitmap(Weapons.BIG_SWORD.getWeaponImg(),
-                    attackBox.left,
-                    attackBox.top,
+                    attackBox.left + wepRotAdjustmentLeft(),
+                    attackBox.top + wepRotAdjustmentTop(),
                     null);
             c.rotate(getWepRot() * -1 , attackBox.left, attackBox.top);
 
@@ -47,6 +47,26 @@ public class Knight extends Character {
             c.restore(); // restoration du canvas pour remettre les éléments tournés à la bonne rotation
         }
     }
+
+    private float wepRotAdjustmentLeft() {
+        return switch (this.getFaceDir())
+        {
+            case GameConstants.Face_Dir.UP, GameConstants.Face_Dir.RIGHT ->
+                    -Weapons.BIG_SWORD.getWidth();
+
+            default -> 0;
+        };
+    }
+    private float wepRotAdjustmentTop() {
+        return switch (this.getFaceDir())
+        {
+            case GameConstants.Face_Dir.UP, GameConstants.Face_Dir.LEFT ->
+                    -Weapons.BIG_SWORD.getHeight();
+
+            default -> 0;
+        };
+    }
+
     private float getWepRot()
     {
         return switch (this.getFaceDir())
@@ -130,8 +150,8 @@ public class Knight extends Character {
                     new PointF(this.getHitbox().left + 1.75f * GameConstants.Sprite.SCALE_MULTIPLIER,
                             this.getHitbox().top - Weapons.BIG_SWORD.getHeight());
 
-            case GameConstants.Face_Dir.DOWN ->new PointF(this.getHitbox().left + 5f * GameConstants.Sprite.SCALE_MULTIPLIER,
-                    this.getHitbox().bottom + 15f * GameConstants.Sprite.SCALE_MULTIPLIER);
+            case GameConstants.Face_Dir.DOWN ->new PointF(this.getHitbox().left + 2.5f * GameConstants.Sprite.SCALE_MULTIPLIER,
+                    this.getHitbox().bottom);
 
             case GameConstants.Face_Dir.LEFT -> new PointF(this.getHitbox().left - Weapons.BIG_SWORD.getHeight(),
                     this.getHitbox().bottom - Weapons.BIG_SWORD.getWidth() - 0.75f * GameConstants.Sprite.SCALE_MULTIPLIER);
