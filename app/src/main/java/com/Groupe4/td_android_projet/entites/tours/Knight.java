@@ -14,7 +14,8 @@ import com.Groupe4.td_android_projet.helpers.GameConstants;
 public class Knight extends Character {
     protected RectF attackBox;
     private final Paint redPaint = new Paint();
-
+    int compteFace = 0;
+    boolean testRotation;
 
 
     public Knight(PointF pos)
@@ -28,31 +29,69 @@ public class Knight extends Character {
     {
 
     }
-    public void drawWeapon(Canvas c, Knight k)
+    public void drawWeapon(Canvas c)
     {
         if(attackBox != null){
 
             c.save(); // sauvegarde du canvas pour ne pas tourner tous les éléments
 
-            c.rotate(90, attackBox.left, attackBox.top); // rotation de l'attack box
+            c.rotate(getWepRot(), attackBox.left, attackBox.top); // rotation de l'attack box
             c.drawBitmap(Weapons.BIG_SWORD.getWeaponImg(),
                     attackBox.left,
                     attackBox.top,
                     null);
-            c.rotate(-90, attackBox.left, attackBox.top);
-
+            c.rotate(getWepRot() * -1 , attackBox.left, attackBox.top);
 
             c.drawRect(attackBox, redPaint);
 
             c.restore(); // restoration du canvas pour remettre les éléments tournés à la bonne rotation
         }
     }
+    private float getWepRot()
+    {
+        return switch (this.getFaceDir())
+        {
+
+            case GameConstants.Face_Dir.LEFT -> 90;
+            case GameConstants.Face_Dir.UP -> 180;
+            case GameConstants.Face_Dir.RIGHT -> 270;
+
+            default -> 0;
+        };
+    }
+
     public void updateWebHitbox() {
+
+        if(testRotation)
+        {
+            //region Test rotation chevalier
+            if (compteFace % 100 == 25) {
+                this.setFaceDir(GameConstants.Face_Dir.LEFT);
+            }
+
+            if (compteFace % 100 == 50) {
+                this.setFaceDir(GameConstants.Face_Dir.UP);
+            }
+            if (compteFace % 100 == 75) {
+                this.setFaceDir(GameConstants.Face_Dir.RIGHT);
+            }
+            if (compteFace % 100 == 99) {
+                this.setFaceDir(GameConstants.Face_Dir.DOWN);
+                compteFace = 0;
+            }
+
+            compteFace++;
+            //endregion
+        }
+
         PointF pos = getWepPos();
         float w = getWepWidth();
         float h = getWepHeight();
 
         attackBox = new RectF(pos.x, pos.y, pos.x+ w,pos.y+h);
+
+
+
 
     }
 

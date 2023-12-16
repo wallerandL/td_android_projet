@@ -352,7 +352,7 @@ public class Playing extends BaseState implements GameStateInterface {
             Knight k = (Knight) c;
 
             if(k != null){
-                k.drawWeapon(canvas, k);
+                k.drawWeapon(canvas);
             }
 
         }
