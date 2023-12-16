@@ -9,7 +9,7 @@ public abstract class Character extends Entity{
     protected int faceDir = GameConstants.Face_Dir.DOWN;
     protected final GameSheet gameSheetType;
     public Character(PointF pos, GameSheet gameSheetType) {
-        super(pos, 1, 1);
+        super(pos, GameConstants.Sprite.SIZE,GameConstants.Sprite.SIZE );
         this.gameSheetType = gameSheetType;
     }
 
