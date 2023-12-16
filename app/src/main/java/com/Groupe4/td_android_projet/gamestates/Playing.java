@@ -347,11 +347,11 @@ public class Playing extends BaseState implements GameStateInterface {
 
     public void drawCharacter(Canvas canvas, Character c){
         canvas.drawBitmap(c.getGameSheetType().getSprite(c.getFaceDir(),c.getAniIndex()), c.getHitbox().left,c.getHitbox().top,null);
-        canvas.drawRect(c.getHitbox(),redPaint);
+        canvas.drawRect(c.getHitbox().left,c.getHitbox().top,c.getHitbox().right,c.getHitbox().bottom,redPaint);
+
         if(c instanceof Knight){
 
             Knight k = (Knight) c;
-
 
             if(k != null){
                 Log.d("hitbox chevalier", String.valueOf(k.getHitbox()));
