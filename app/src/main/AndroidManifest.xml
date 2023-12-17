@@ -15,6 +15,9 @@
         <activity
             android:name=".Main.MainActivity"
             android:screenOrientation="landscape"
+            android:exported="false"/>
+
+        <activity android:name=".Main.Connexion"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,5 +30,7 @@
                 android:value="" />
         </activity>
     </application>
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 </manifest>
