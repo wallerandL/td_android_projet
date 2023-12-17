@@ -80,7 +80,7 @@ public class Connexion extends AppCompatActivity {
     }
 
     private void MysqlConnexion() {
-        String jdbcURL = "jdbc:mysql://127.0.0.1:3306/android";
+        String jdbcURL = "jdbc:mysql://localhost:3306/android";
         String user = "user";
         String passwd = "user";
 
@@ -91,9 +91,11 @@ public class Connexion extends AppCompatActivity {
             Toast.makeText(Connexion.this, "Connexion reussi a la base de bonnées.", Toast.LENGTH_LONG).show();
         } catch (ClassNotFoundException e) {
             Toast.makeText(Connexion.this, "Driver manquant." + e.getMessage().toString(), Toast.LENGTH_LONG).show();
-
+            Log.v("marche pas ",""+ e.getMessage());
         } catch (java.sql.SQLException ex) {
             Toast.makeText(Connexion.this, "Connexion au serveur impossible." + ex.getMessage().toString(), Toast.LENGTH_LONG).show();
+            Log.v("marche pas sans raison",""+ ex.getMessage());
+
             Log.d("error1", "SQLException: " + ex.getMessage());
             Log.d("error2", "SQLState: " + ex.getSQLState());
             Log.d("error3", "VendorError: " + ex.getErrorCode());
