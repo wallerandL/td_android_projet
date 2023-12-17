@@ -8,9 +8,11 @@ public abstract class Character extends Entity{
     protected int aniTick, aniIndex;
     protected int faceDir = GameConstants.Face_Dir.DOWN;
     protected final GameSheet gameSheetType;
+    private int lastDir;
     public Character(PointF pos, GameSheet gameSheetType) {
         super(pos, GameConstants.Sprite.SIZE,GameConstants.Sprite.SIZE );
         this.gameSheetType = gameSheetType;
+
     }
 
     protected void updateAnimation(){
@@ -42,5 +44,10 @@ public abstract class Character extends Entity{
 
     public GameSheet getGameSheetType() {
         return gameSheetType;
+    }
+
+
+    public int getLastDir() {
+    return lastDir;
     }
 }

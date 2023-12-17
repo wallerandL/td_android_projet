@@ -30,7 +30,6 @@ public class Reptil extends Character {
             faceDir = rand.nextInt(4);
             lastDirChange = System.currentTimeMillis();
         }
-
         switch (faceDir){
             case GameConstants.Face_Dir.DOWN:
                 hitbox.top += delta * 400;

@@ -19,6 +19,8 @@ public class GameConstants {
     public static final class Animation{
         public static final int SPEED = 10;
         public static final int AMOUNT = 4;
+        public static int TILE=160;
+        public static int TILEHAUT=145;
 
     }
     public static final class Enemies{
@@ -26,5 +28,4 @@ public class GameConstants {
         public static final int REPTIL = 1;
 
     }
-
 }

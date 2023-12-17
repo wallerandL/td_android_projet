@@ -3,8 +3,10 @@ package com.Groupe4.td_android_projet.gamestates;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import static com.Groupe4.td_android_projet.helpers.GameConstants.Animation.TILE;
 import static com.Groupe4.td_android_projet.helpers.GameConstants.Enemies.REPTIL;
 import static com.Groupe4.td_android_projet.helpers.GameConstants.Enemies.SKELLETON;
+import static com.Groupe4.td_android_projet.helpers.GameConstants.Face_Dir.LEFT;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -65,7 +67,6 @@ public class Playing extends BaseState implements GameStateInterface {
     private final int decalage_y_selection_tour = 200;
 
 
-
     private final ArrayList<Skeleton> skeletons;
     private final ArrayList<Reptil> reptils;
     private final ArrayList<EskimoNinja> eskimoNinjas;
@@ -86,10 +87,10 @@ public class Playing extends BaseState implements GameStateInterface {
         players = new ArrayList<>();
         redPaint.setColor(Color.RED);
         redPaint.setStyle(Paint.Style.STROKE);
-        yellowPaint.setColor(Color.rgb(255,140,0));
-        skeleton = new Skeleton(new PointF(rand.nextInt(2220), rand.nextInt(1080)));
-        reptil = new Reptil(new PointF(rand.nextInt(2220), rand.nextInt(1080)));
-        allies= new Allies(new PointF(500,500));
+        yellowPaint.setColor(Color.rgb(255, 140, 0));
+        skeleton = new Skeleton(new PointF(800,0));
+        reptil = new Reptil(new PointF(800, 0));
+        allies = new Allies(new PointF(500, 500));
         testMap = new MapManager();
         waveManager = new WaveManager(this);
         btnMenu = new CustomButton(2060, 900, ButtonImages.PLAYING_MENU.getWidth(), ButtonImages.PLAYING_MENU.getHeight());
@@ -108,7 +109,7 @@ public class Playing extends BaseState implements GameStateInterface {
         {
             k.updateWebHitbox();
         }
-        skeleton.update(delta);
+//        skeleton.update(delta);
         for (Skeleton skeleton : skeletons){
             if(skeleton.isActive()){
                 skeleton.update(delta);
@@ -314,6 +315,7 @@ public class Playing extends BaseState implements GameStateInterface {
                 btnMenu.getHitbox().top,
                 null);
     }
+
     @Override
     public boolean touchEvents(MotionEvent event) {
 
@@ -331,8 +333,6 @@ public class Playing extends BaseState implements GameStateInterface {
 
             btnMenu.setPushed(false);
         }
-
-
 
 
         switch (event.getAction()) {
@@ -425,6 +425,7 @@ public class Playing extends BaseState implements GameStateInterface {
         }
 
     }
+
     public void spawnReptil(float spawnX, float spawnY) {
         synchronized (reptils) {
             reptils.add(new Reptil(new PointF(spawnX,spawnY)));
@@ -433,6 +434,7 @@ public class Playing extends BaseState implements GameStateInterface {
         }
 
     }
+
     public void spawnEskimo(float localx, float localy) {
         synchronized (eskimoNinjas) {
             eskimoNinjas.add(new EskimoNinja(new PointF(localx,localy)));
@@ -441,6 +443,7 @@ public class Playing extends BaseState implements GameStateInterface {
         }
 
     }
+
     public void spawnKnight(float localx, float localy) {
         synchronized (knights) {
             knights.add(new Knight(new PointF(localx,localy)));
@@ -449,6 +452,7 @@ public class Playing extends BaseState implements GameStateInterface {
         }
 
     }
+
     public void spawnSpirit(float localx, float localy) {
         synchronized (spirits) {
             spirits.add(new Spirit(new PointF(localx,localy)));
@@ -458,4 +462,14 @@ public class Playing extends BaseState implements GameStateInterface {
 
     }
     //endregion
+
+
+    public boolean isNextTileRoadSkeleton(Skeleton s) {
+        //enemi pos
+        //enemi dir (facedir)
+        //tile at new possible pos
+
+        return false;
+    }
+
 }
