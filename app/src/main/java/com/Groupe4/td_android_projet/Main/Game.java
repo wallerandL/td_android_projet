@@ -61,8 +61,6 @@ public class Game {
                break;
            case PLAYING : playing.touchEvents(event);
                break;
-           // case PLAYINGUI : playingUI.touchEvents(event);
-             //   break;
 
         }
 
@@ -77,7 +75,7 @@ public class Game {
     }
 
     public enum GameState {
-        MENU, PLAYING, PLAYINGUI;
+        MENU, PLAYING;
     }
 
     public GameState getCurrentGameState() {
