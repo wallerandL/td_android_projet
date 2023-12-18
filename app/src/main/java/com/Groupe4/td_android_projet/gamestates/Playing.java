@@ -1,5 +1,6 @@
 package com.Groupe4.td_android_projet.gamestates;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -21,7 +22,7 @@ import com.Groupe4.td_android_projet.UI.ButtonImages;
 import com.Groupe4.td_android_projet.UI.CustomButton;
 import com.Groupe4.td_android_projet.entites.Character;
 import com.Groupe4.td_android_projet.Main.GameLoop;
-import com.Groupe4.td_android_projet.entites.Weapons;
+import com.Groupe4.td_android_projet.entites.Projectiles;
 import com.Groupe4.td_android_projet.entites.enemies.Reptil;
 import com.Groupe4.td_android_projet.entites.enemies.Skeleton;
 import com.Groupe4.td_android_projet.entites.tours.EskimoNinja;
@@ -31,7 +32,6 @@ import com.Groupe4.td_android_projet.events.WaveManager;
 import com.Groupe4.td_android_projet.entites.tours.Allies;
 import com.Groupe4.td_android_projet.environement.MapManager;
 import com.Groupe4.td_android_projet.Main.Game;
-import com.Groupe4.td_android_projet.helpers.GameConstants;
 import com.Groupe4.td_android_projet.helpers.interfaces.GameStateInterface;
 
 import java.util.ArrayList;
@@ -44,26 +44,18 @@ public class Playing extends BaseState implements GameStateInterface {
     private final Paint redPaint = new Paint();
 
     private final Random rand = new Random();
-    boolean eskimo_selected, knight_selected, spirit_selected, player_selected;
+
+    boolean eskimo_selected, knight_selected, spirit_selected;
     private final Paint yellowPaint = new Paint();
     private boolean movePlayer;
     private SurfaceHolder holder;
-    private float buttonX,buttonY,buttonX2,buttonY2,buttonX3,buttonY3;
+    private float buttonX, buttonY, buttonX2, buttonY2, buttonX3, buttonY3;
     private int newWidth, newHeight;
-    private final ArrayList<PointF> sqarePos = new ArrayList<>() ;
-
+    private final ArrayList<PointF> sqarePos = new ArrayList<>();
     private GameLoop gameLoop;
     private final MapManager testMap;
-    private final Skeleton skeleton;
-    private final Reptil reptil;
-    float x,y;
-    private final Allies allies;
-    private Knight knight;
-    private Spirit spirit;
-    private EskimoNinja eskimoNinja;
-
+    float x, y;
     private final int decalage_y_selection_tour = 200;
-
 
 
     private final ArrayList<Skeleton> skeletons;
@@ -75,6 +67,7 @@ public class Playing extends BaseState implements GameStateInterface {
     private final CustomButton btnMenu;
     private final WaveManager waveManager;
     private RectF attackBox;
+
     public Playing(Game game) {
         super(game);
 
@@ -86,10 +79,7 @@ public class Playing extends BaseState implements GameStateInterface {
         players = new ArrayList<>();
         redPaint.setColor(Color.RED);
         redPaint.setStyle(Paint.Style.STROKE);
-        yellowPaint.setColor(Color.rgb(255,140,0));
-        skeleton = new Skeleton(new PointF(rand.nextInt(2220), rand.nextInt(1080)));
-        reptil = new Reptil(new PointF(rand.nextInt(2220), rand.nextInt(1080)));
-        allies= new Allies(new PointF(500,500));
+        yellowPaint.setColor(Color.rgb(255, 140, 0));
         testMap = new MapManager();
         waveManager = new WaveManager(this);
         btnMenu = new CustomButton(2060, 900, ButtonImages.PLAYING_MENU.getWidth(), ButtonImages.PLAYING_MENU.getHeight());
@@ -99,33 +89,47 @@ public class Playing extends BaseState implements GameStateInterface {
     @Override
     public void update(double delta) {
         updateWaveManager();
-        if(isTimeForNewEnemy()){
+        if (isTimeForNewEnemy()) {
             spawnEnemy();
         }
 
         checkAttack();
-        for(Knight k : knights )
-        {
+        for (Knight k : knights) {
             k.updateWebHitbox();
         }
-        skeleton.update(delta);
-        for (Skeleton skeleton : skeletons){
-            if(skeleton.isActive()){
+        for (Spirit s : spirits) {
+            updateEnergyBallPosition(s);
+            if (s.intervalDetection < 15) {
+                s.projectileActive = false;
+            }
+            s.intervalDetection--;
+        }
+        for(EskimoNinja e : eskimoNinjas)
+        {
+            updateIceSpikePosition(e);
+            if(e.intervalDetection < 10)
+            {
+                e.projectileActive = false;
+            }
+            e.intervalDetection--;
+
+        }
+
+        for (Skeleton skeleton : skeletons) {
+            if (skeleton.isActive()) {
                 skeleton.update(delta);
+                skeleton.invincibilityFrame--;
 
             }
-
         }
-        reptil.update(delta);
-        for (Reptil reptil : reptils){
-            if(reptil.isActive()){
+        for (Reptil reptil : reptils) {
+            if (reptil.isActive()) {
                 reptil.update(delta);
-
             }
         }
 
-        if (isAllEnemiesDead()){
-            if (isThereMoreWaves()){
+        if (isAllEnemiesDead()) {
+            if (isThereMoreWaves()) {
                 waveManager.increaseWaveIndex();
                 waveManager.resetEnemyIndex();
             }
@@ -147,40 +151,127 @@ public class Playing extends BaseState implements GameStateInterface {
         }
     }
 
+    //region detection d'ennemi, attaque et collision
     private void checkAttack() {
-        for(Knight k : knights){
-            if(k.getAttackBox() != null) {
-                for(Skeleton skel : skeletons)
-                {
-                    if (k.getAttackBox().intersects(skel.getHitbox().left, skel.getHitbox().top, skel.getHitbox().right, skel.getHitbox().bottom))
-                    {
-                        if(skel.invincibilityFrame != 0)
-                            skel.invincibilityFrame--;
-                        else
+        for (Knight k : knights) {
+            if (k.getAttackBox() != null) {
+                for (Skeleton skel : skeletons) {
+                    if (k.getAttackBox().intersects(skel.getHitbox().left, skel.getHitbox().top, skel.getHitbox().right, skel.getHitbox().bottom)) {
+                        if (skel.invincibilityFrame <= 0) {
                             skel.setActive(false);
+                        }
                     }
                 }
 
 
-                for(Reptil rept : reptils)
-                {
-                    if (k.getAttackBox().intersects(rept.getHitbox().left, rept.getHitbox().top, rept.getHitbox().right, rept.getHitbox().bottom))
-                    {
+                for (Reptil rept : reptils) {
+                    if (k.getAttackBox().intersects(rept.getHitbox().left, rept.getHitbox().top, rept.getHitbox().right, rept.getHitbox().bottom)) {
                         addEnemy(SKELLETON, rept.getHitbox().left, rept.getHitbox().top);
                         rept.setActive(false);
                     }
                 }
             }
         }
+        for (Spirit s : spirits) {
+            for (Skeleton skel : skeletons) {
+                s.detectEnnemy(skel);
+                if (s.hurtbox != null && s.projectileActive) {
+                    if (s.hurtbox.intersects(skel.getHitbox().left, skel.getHitbox().top, skel.getHitbox().right, skel.getHitbox().bottom)) {
+                        if (skel.invincibilityFrame <= 0) {
+                            skel.setActive(false);
+                            s.projectileActive = false;
+                        }
+                    }
+                }
+            }
+
+
+            for (Reptil rept : reptils) {
+                s.detectEnnemy(rept);
+                if (s.hurtbox != null && s.projectileActive) {
+                    if (s.hurtbox.intersects(rept.getHitbox().left, rept.getHitbox().top, rept.getHitbox().right, rept.getHitbox().bottom)) {
+                        addEnemy(SKELLETON, rept.getHitbox().left, rept.getHitbox().top);
+                        rept.setActive(false);
+
+                        s.projectileActive = false;
+                    }
+                }
+            }
+        }
+        for (EskimoNinja e : eskimoNinjas) {
+            for (Skeleton skel : skeletons) {
+                e.detectEnnemy(skel);
+                if (e.hurtbox != null && e.projectileActive) {
+                    if (e.hurtbox.intersects(skel.getHitbox().left, skel.getHitbox().top, skel.getHitbox().right, skel.getHitbox().bottom)) {
+                        if (skel.invincibilityFrame <= 0) {
+                            skel.setActive(false);
+                        }
+                    }
+                }
+            }
+
+
+            for (Reptil rept : reptils) {
+                e.detectEnnemy(rept);
+                if (e.hurtbox != null && e.projectileActive) {
+                    if (e.hurtbox.intersects(rept.getHitbox().left, rept.getHitbox().top, rept.getHitbox().right, rept.getHitbox().bottom)) {
+                        addEnemy(SKELLETON, rept.getHitbox().left, rept.getHitbox().top);
+                        rept.setActive(false);
+
+                    }
+                }
+            }
+        }
     }
 
+    private void updateEnergyBallPosition(Spirit s) {
+        // Calcule les composantes x et y de la vitesse en utilisant l'angle
+        if (s.projectileActive) {
+
+            float velocityX = s.getProjectileSpeed() * (float) Math.cos(Math.toRadians(s.angle));
+            float velocityY = s.getProjectileSpeed() * (float) Math.sin(Math.toRadians(s.angle));
+
+            // Met à jour la position du projectile
+            s.projectilePos.x += velocityX;
+            s.projectilePos.y += velocityY;
+
+            Log.d("position hurtbox", "projectilePos.x : " + s.projectilePos.x + " ; projectilePos.y : " + s.projectilePos.y);
+
+            // Met à jour la boîte de collision du projectile
+            float w = Projectiles.ENERGY_BALL.getWidth();
+            float h = Projectiles.ENERGY_BALL.getHeight();
+            s.hurtbox.set(s.projectilePos.x, s.projectilePos.y, s.projectilePos.x + w, s.projectilePos.y + h);
+        }
+    }
+
+    private void updateIceSpikePosition(EskimoNinja e) {
+        // Calcule les composantes x et y de la vitesse en utilisant l'angle
+        if (e.projectileActive) {
+
+            float velocityX = e.getProjectileSpeed() * (float) Math.cos(Math.toRadians(e.angle));
+            float velocityY = e.getProjectileSpeed() * (float) Math.sin(Math.toRadians(e.angle));
+
+            // Met à jour la position du projectile
+            e.projectilePos.x += velocityX;
+            e.projectilePos.y += velocityY;
+
+            Log.d("position hurtbox", "projectilePos.x : " + e.projectilePos.x + " ; projectilePos.y : " + e.projectilePos.y);
+
+            // Met à jour la boîte de collision du projectile
+            float w = Projectiles.ENERGY_BALL.getWidth();
+            float h = Projectiles.ENERGY_BALL.getHeight();
+            e.hurtbox.set(e.projectilePos.x, e.projectilePos.y, e.projectilePos.x + w, e.projectilePos.y + h);
+        }
+    }
+
+    //endregion
     private boolean isThereMoreWaves() {
         return WaveManager.isTherMoreWaves();
     }
 
     private boolean isAllEnemiesDead() {
-        if (skeletons.isEmpty() && reptils.isEmpty()){
-            if (waveManager.isThereMoreEnemiesInWaves()){
+        if (skeletons.isEmpty() && reptils.isEmpty()) {
+            if (waveManager.isThereMoreEnemiesInWaves()) {
                 return false;
             }
             return true;
@@ -188,36 +279,37 @@ public class Playing extends BaseState implements GameStateInterface {
         return false;
     }
 
-    public void kill(){
+    public void kill() {
         skeletons.clear();
         reptils.clear();
     }
 
     //region vagues
-    private void updateWaveManager(){
+    private void updateWaveManager() {
         this.getWaveManager().update();
     }
 
     private void spawnEnemy() {
-        addEnemy(this.getWaveManager().getNextEnemy(), 0,800);
+        addEnemy(this.getWaveManager().getNextEnemy(), 0, 800);
     }
+
     public void addEnemy(int enemyType, float x, float y) {
         Log.d("Playing", "Adding enemy of type: " + enemyType);
         switch (enemyType) {
             case SKELLETON:
-                spawnSkeleton(x,y);
+                spawnSkeleton(x, y);
                 break;
             case REPTIL:
-                spawnReptil(0,800);
+                spawnReptil(0, 800);
                 break;
         }
     }
 
     private boolean isTimeForNewEnemy() {
         //Log.d("isTimeForNewEnemy", "Adding enemy of type: ");
-        if(this.getWaveManager().isThereMoreEnemiesInWaves() && this.getWaveManager().isTimeForNewEnemyq()){
-                Log.d("isTimeForNewEnemy3", "Adding enemy of type: ");
-                return true;
+        if (this.getWaveManager().isThereMoreEnemiesInWaves() && this.getWaveManager().isTimeForNewEnemyq()) {
+            Log.d("isTimeForNewEnemy3", "Adding enemy of type: ");
+            return true;
         }
         return false;
     }
@@ -234,25 +326,25 @@ public class Playing extends BaseState implements GameStateInterface {
         float stripeTop = 0;
         float stripeRight = screenWidth;
         float stripeBottom = c.getHeight();
-        c.drawRect(stripeLeft,stripeTop, stripeRight, stripeBottom, yellowPaint);
+        c.drawRect(stripeLeft, stripeTop, stripeRight, stripeBottom, yellowPaint);
         //endregion
 
         //region draw tour / ennemies
         for (Skeleton skeleton : skeletons)
-            if(skeleton.isActive())
+            if (skeleton.isActive())
                 drawCharacter(c, skeleton);
 
         for (Reptil reptil : reptils)
-            if(reptil.isActive())
+            if (reptil.isActive())
                 drawCharacter(c, reptil);
 
-        for(EskimoNinja e : eskimoNinjas)
+        for (EskimoNinja e : eskimoNinjas)
             drawCharacter(c, e);
 
-        for(Knight k : knights)
+        for (Knight k : knights)
             drawCharacter(c, k);
 
-        for(Spirit s : spirits)
+        for (Spirit s : spirits)
             drawCharacter(c, s);
         //endregion
 
@@ -297,7 +389,7 @@ public class Playing extends BaseState implements GameStateInterface {
 
         // Ajuster la position du bouton à l'intérieur du rectangle
         buttonX3 = stripeLeft + 40; // Décalage de 10 pixels vers la gauche
-        buttonY3 = stripeTop + 2* decalage_y_selection_tour + 30;
+        buttonY3 = stripeTop + 2 * decalage_y_selection_tour + 30;
 
         // Dessiner l'image redimensionnée dans le rectangle
         c.drawBitmap(Bitmap.createScaledBitmap(buttonImage3, newWidth, newHeight, false),
@@ -305,8 +397,36 @@ public class Playing extends BaseState implements GameStateInterface {
         //endregion
 
         drawUI(c);
-        }
+        for (Spirit s : spirits)
+            drawEnergyBall(c, s);
 
+        for(EskimoNinja e :eskimoNinjas)
+            drawIceSpike(c, e);
+
+    }
+
+    public void drawEnergyBall(Canvas c,Spirit s)
+    {
+        if(s.hurtbox != null && s.projectileActive){
+            c.drawBitmap(Projectiles.ENERGY_BALL.getProjectileImg(),
+                    s.hurtbox.left,
+                    s.hurtbox.top,
+                    null);
+            Log.d("hurtboxDraw", "hurtbox après dessin " + s.hurtbox);
+            c.drawRect(s.hurtbox, redPaint);
+        }
+    }
+    public void drawIceSpike(Canvas c,EskimoNinja e)
+    {
+        if(e.hurtbox != null && e.projectileActive){
+            c.drawBitmap(Projectiles.ICE_SPIKE.getProjectileImg(),
+                    e.hurtbox.left,
+                    e.hurtbox.top,
+                    null);
+            Log.d("hurtboxDraw eskimo", "hurtbox après dessin " + e.hurtbox);
+            c.drawRect(e.hurtbox, redPaint);
+        }
+    }
     private void drawUI(Canvas c) {
         c.drawBitmap(
                 ButtonImages.PLAYING_MENU.getBtnImg(btnMenu.isPushed()),
@@ -410,8 +530,7 @@ public class Playing extends BaseState implements GameStateInterface {
             }
 
         }
-
-}
+    }
     public WaveManager getWaveManager(){
         return waveManager;
     }
@@ -429,9 +548,7 @@ public class Playing extends BaseState implements GameStateInterface {
         synchronized (reptils) {
             reptils.add(new Reptil(new PointF(spawnX,spawnY)));
             System.out.println("Spawned reptil at: (" + spawnX + ", " + spawnY + ")");
-
         }
-
     }
     public void spawnEskimo(float localx, float localy) {
         synchronized (eskimoNinjas) {

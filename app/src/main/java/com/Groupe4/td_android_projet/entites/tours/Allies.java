@@ -14,10 +14,5 @@ public class Allies extends Character {
 
     public void update(double delta, boolean ennemyInRange)
     {
-        // booleen 'movePlayer' remplace par 'ennemyInRange' puisqu'on ne bouge pas le joueur
-        // A voir si on màj l'animation de la tour, si on fait un autre traitement, sinon virer ca completement
-        if (ennemyInRange)
-            updateAnimation();
-
     }
 }
