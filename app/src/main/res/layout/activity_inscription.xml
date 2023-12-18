@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- res/layout/activity_inscription.xml -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        tools:context=".InscriptionActivity">
+
+        <TextView
+            android:id="@+id/textViewError"
+            android:text="error"
+            android:textColor="#ff0000"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+        <EditText
+            android:id="@+id/editTextNomUtilisateur"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nom d'utilisateur"
+            android:inputType="text"/>
+
+        <EditText
+            android:id="@+id/editTextMotDePasse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Mot de passe"
+            android:inputType="textPassword"/>
+
+        <Button
+            android:id="@+id/buttonInscription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="S'inscrire"/>
+
+        <Button
+            android:id="@+id/Retour"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Retour" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

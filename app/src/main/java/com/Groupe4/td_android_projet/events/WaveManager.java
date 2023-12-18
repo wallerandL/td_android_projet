@@ -15,7 +15,7 @@ public class WaveManager {
     private Playing playing;
     private Random rand = new Random();
     private static ArrayList<Waves> waves=new ArrayList<>();
-    private int enemySpawnTickLimit=60*1;
+    private int enemySpawnTickLimit=10*1;
     private int enemySpawnTick = enemySpawnTickLimit;
     private int enemyIndex;
     private static int waveIndex;
@@ -45,8 +45,19 @@ public class WaveManager {
     }
 
     private void creatWaves() {
-        waves.add(new Waves(new ArrayList<Integer>(Arrays.asList(1,1,1))));
-        waves.add(new Waves(new ArrayList<Integer>(Arrays.asList(rand.nextInt(2),rand.nextInt(2),rand.nextInt(2),rand.nextInt(2)))));
+        waves.add(new Waves(new ArrayList<Integer>(Arrays.asList(0))));
+        waves.add(new Waves(new ArrayList<Integer>(Arrays.asList(0,0))));
+        waves.add(new Waves(new ArrayList<Integer>(Arrays.asList(0,0,0,1))));
+        waves.add(new Waves(new ArrayList<Integer>(Arrays.asList(0,1,0,1,0,1,0,1))));
+        for (int w=4;w<101;w++) {
+            // Vous pouvez générer des configurations de vagues de manière aléatoire ou selon une logique spécifique
+            ArrayList<Integer> randomWave = new ArrayList<>();
+            for (int i = 0; i < w*2; i++) {
+                randomWave.add(rand.nextInt(2));
+            }
+            waves.add(new Waves(randomWave));
+        }
+
     }
 
     public ArrayList<Waves> getWaves(){

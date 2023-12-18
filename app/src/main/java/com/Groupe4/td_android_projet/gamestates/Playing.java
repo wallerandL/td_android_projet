@@ -1,21 +1,29 @@
 package com.Groupe4.td_android_projet.gamestates;
 
-import android.annotation.SuppressLint;
+import static androidx.core.content.ContextCompat.startActivity;
+
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import static com.Groupe4.td_android_projet.helpers.GameConstants.Animation.TILE;
 import static com.Groupe4.td_android_projet.helpers.GameConstants.Enemies.REPTIL;
 import static com.Groupe4.td_android_projet.helpers.GameConstants.Enemies.SKELLETON;
+import static com.Groupe4.td_android_projet.helpers.GameConstants.Face_Dir.LEFT;
+
 
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
+import android.widget.Toast;
 
+import com.Groupe4.td_android_projet.Main.GameOver;
 import com.Groupe4.td_android_projet.Main.MainActivity;
 import com.Groupe4.td_android_projet.R;
 import com.Groupe4.td_android_projet.UI.ButtonImages;
@@ -32,11 +40,14 @@ import com.Groupe4.td_android_projet.events.WaveManager;
 import com.Groupe4.td_android_projet.entites.tours.Allies;
 import com.Groupe4.td_android_projet.environement.MapManager;
 import com.Groupe4.td_android_projet.Main.Game;
+import com.Groupe4.td_android_projet.helpers.GameConstants;
 import com.Groupe4.td_android_projet.helpers.interfaces.GameStateInterface;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
+
 
 
 public class Playing extends BaseState implements GameStateInterface {
@@ -55,6 +66,7 @@ public class Playing extends BaseState implements GameStateInterface {
     private GameLoop gameLoop;
     private final MapManager testMap;
     float x, y;
+    private int currentWaypointIndex=0;
     private final int decalage_y_selection_tour = 200;
 
 
@@ -67,6 +79,13 @@ public class Playing extends BaseState implements GameStateInterface {
     private final CustomButton btnMenu;
     private final WaveManager waveManager;
     private RectF attackBox;
+
+    public static int PV=10;
+    public static int Argent=10;
+
+    public static int SPEEDSKELETON = 300;
+    public static int SPEEDREPIL = 400;
+
 
     public Playing(Game game) {
         super(game);
@@ -88,6 +107,16 @@ public class Playing extends BaseState implements GameStateInterface {
 
     @Override
     public void update(double delta) {
+
+
+        if (PV <= 0) {
+            // Le nombre de vies est épuisé, passer à la page "Game Over"
+            goToGameOverPage();
+            return;
+        }
+
+
+
         updateWaveManager();
         if (isTimeForNewEnemy()) {
             spawnEnemy();
@@ -121,10 +150,12 @@ public class Playing extends BaseState implements GameStateInterface {
                 skeleton.invincibilityFrame--;
 
             }
+
         }
         for (Reptil reptil : reptils) {
             if (reptil.isActive()) {
                 reptil.update(delta);
+
             }
         }
 
@@ -157,8 +188,11 @@ public class Playing extends BaseState implements GameStateInterface {
             if (k.getAttackBox() != null) {
                 for (Skeleton skel : skeletons) {
                     if (k.getAttackBox().intersects(skel.getHitbox().left, skel.getHitbox().top, skel.getHitbox().right, skel.getHitbox().bottom)) {
-                        if (skel.invincibilityFrame <= 0) {
+                        if(skel.invincibilityFrame != 0)
+                            skel.invincibilityFrame--;
+                        else {
                             skel.setActive(false);
+                            Argent+=1;  skel.setActive(false);
                         }
                     }
                 }
@@ -205,7 +239,9 @@ public class Playing extends BaseState implements GameStateInterface {
                     if (e.hurtbox.intersects(skel.getHitbox().left, skel.getHitbox().top, skel.getHitbox().right, skel.getHitbox().bottom)) {
                         if (skel.invincibilityFrame <= 0) {
                             skel.setActive(false);
+                            Argent+=1;
                         }
+
                     }
                 }
             }
@@ -215,9 +251,11 @@ public class Playing extends BaseState implements GameStateInterface {
                 e.detectEnnemy(rept);
                 if (e.hurtbox != null && e.projectileActive) {
                     if (e.hurtbox.intersects(rept.getHitbox().left, rept.getHitbox().top, rept.getHitbox().right, rept.getHitbox().bottom)) {
-                        addEnemy(SKELLETON, rept.getHitbox().left, rept.getHitbox().top);
+                        currentWaypointIndex=rept.getCurrentWaypointIndex();
+                        Log.v("getcurrentwaypoint",""+rept.getCurrentWaypointIndex());
+                        spawnSkeleton(rept.getHitbox().left, rept.getHitbox().top,currentWaypointIndex);
                         rept.setActive(false);
-
+                        Argent+=2;
                     }
                 }
             }
@@ -297,7 +335,8 @@ public class Playing extends BaseState implements GameStateInterface {
         Log.d("Playing", "Adding enemy of type: " + enemyType);
         switch (enemyType) {
             case SKELLETON:
-                spawnSkeleton(x, y);
+                currentWaypointIndex=0;
+                spawnSkeleton(x,y,currentWaypointIndex);
                 break;
             case REPTIL:
                 spawnReptil(0, 800);
@@ -395,6 +434,57 @@ public class Playing extends BaseState implements GameStateInterface {
         c.drawBitmap(Bitmap.createScaledBitmap(buttonImage3, newWidth, newHeight, false),
                 buttonX3, buttonY3, yellowPaint);
         //endregion
+        Bitmap start = BitmapFactory.decodeResource(MainActivity.getGameContext().getResources(), R.drawable.start);
+        c.drawBitmap(Bitmap.createScaledBitmap(start, 100, 100, false), 0, 830, yellowPaint);
+        drawUI(c);
+        Bitmap end = BitmapFactory.decodeResource(MainActivity.getGameContext().getResources(), R.drawable.end);
+        c.drawBitmap(Bitmap.createScaledBitmap(end, 100, 100, false), 1620, 10, yellowPaint);
+
+        //region affichage PV
+        Paint textPaint = new Paint();
+        textPaint.setColor(Color.BLACK);
+        textPaint.setTextSize(60);  // Taille du texte
+        textPaint.setTextAlign(Paint.Align.CENTER);  // Alignement du texte
+        String TextPV = PV+"\u2764";
+        float xPVText = 100;
+        float yPVText = 55;
+        Typeface typeface = Typeface.create("Sans", Typeface.BOLD);
+        textPaint.setTypeface(typeface);
+        c.drawText(TextPV, xPVText, yPVText, textPaint);
+        //endregion
+
+        //region affichage argent
+        textPaint.setColor(Color.BLACK);
+        textPaint.setTextSize(60);  // Taille du texte
+        textPaint.setTextAlign(Paint.Align.CENTER);  // Alignement du texte
+        String TextArgent = Argent+"\uD83D\uDCB0";
+        float xArgentText = 100;
+        float yArgentText = 120;
+        textPaint.setTypeface(typeface);
+        c.drawText(TextArgent, xArgentText, yArgentText, textPaint);
+        //endregion
+
+        //region affichage cout tour
+        String coutEskimo = "3 \uD83D\uDCB0";
+        float xPrixEskimo = (stripeLeft + stripeRight) / 2;;
+        float yPrixEskimo = 205;
+        textPaint.setTypeface(typeface);
+        c.drawText(coutEskimo, xPrixEskimo, yPrixEskimo, textPaint);
+
+        String coutKnight = "5 \uD83D\uDCB0";
+        float xPrixKnight = (stripeLeft + stripeRight) / 2;;
+        float yPrixKnight = 605;
+
+        textPaint.setTypeface(typeface);
+        c.drawText(coutKnight, xPrixKnight, yPrixKnight, textPaint);
+
+        String coutSpirit = "10 \uD83D\uDCB0";
+        float xPrixSpirit = (stripeLeft + stripeRight) / 2;;
+        float yPrixSpirit = 405;
+
+        textPaint.setTypeface(typeface);
+        c.drawText(coutSpirit, xPrixSpirit, yPrixSpirit, textPaint);
+        //endregion
 
         drawUI(c);
         for (Spirit s : spirits)
@@ -434,6 +524,7 @@ public class Playing extends BaseState implements GameStateInterface {
                 btnMenu.getHitbox().top,
                 null);
     }
+
     @Override
     public boolean touchEvents(MotionEvent event) {
 
@@ -494,15 +585,24 @@ public class Playing extends BaseState implements GameStateInterface {
 
                 // Vérifier si le clic est à l'intérieur des coordonnées de l'image
                 if (eskimo_selected) {
-                    spawnEskimo(x, y);
+                    if(Argent>=3) {
+                        spawnEskimo(x, y);
+                        Argent-=3;
+                    }
                     eskimo_selected = false;
                 }
                 if (knight_selected) {
-                    spawnKnight(x, y);
+                    if(Argent>=5) {
+                        spawnKnight(x, y);
+                        Argent-=5;
+                    }
                     knight_selected = false;
                 }
                 if (spirit_selected) {
-                    spawnSpirit(x, y);
+                    if(Argent>=10) {
+                        spawnSpirit(x, y);
+                        Argent-=10;
+                    }
                     spirit_selected = false;
                 }
 
@@ -536,9 +636,9 @@ public class Playing extends BaseState implements GameStateInterface {
     }
 
     //region Méthodes spawn
-    public void spawnSkeleton(float spawnX, float spawnY) {
+    public void spawnSkeleton(float spawnX, float spawnY,int currentWaypointIndex) {
         synchronized (skeletons) {
-            skeletons.add(new Skeleton(new PointF(spawnX,spawnY)));
+            skeletons.add(new Skeleton(new PointF(spawnX,spawnY),currentWaypointIndex));
             System.out.println("Spawned skeleton at: (" + spawnX + ", " + spawnY + ")");
 
         }
@@ -548,7 +648,9 @@ public class Playing extends BaseState implements GameStateInterface {
         synchronized (reptils) {
             reptils.add(new Reptil(new PointF(spawnX,spawnY)));
             System.out.println("Spawned reptil at: (" + spawnX + ", " + spawnY + ")");
+
         }
+
     }
     public void spawnEskimo(float localx, float localy) {
         synchronized (eskimoNinjas) {
@@ -575,4 +677,10 @@ public class Playing extends BaseState implements GameStateInterface {
 
     }
     //endregion
+
+    private void goToGameOverPage() {
+        Intent intent = new Intent(MainActivity.getGameContext(), GameOver.class);
+        startActivity(MainActivity.getGameContext(), intent, null);
+    }
+
 }

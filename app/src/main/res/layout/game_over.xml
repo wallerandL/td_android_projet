@@ -1,0 +1,39 @@
+<!-- res/layout-land/game_over.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <TextView
+        android:id="@+id/textViewGameOver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:text="Game Over"
+        android:textColor="#FF0000"
+        android:textSize="100sp" />
+
+    <TextView
+        android:id="@+id/textViewScore"
+        android:layout_width="139dp"
+        android:layout_height="56dp"
+        android:layout_below="@+id/textViewGameOver"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="Score : "
+        android:textColor="#FFFFFF"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/buttonReplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewScore"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="Rejouer" />
+</RelativeLayout>

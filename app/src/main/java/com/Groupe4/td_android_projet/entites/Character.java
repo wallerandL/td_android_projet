@@ -28,6 +28,7 @@ public abstract class Character extends Entity{
 
     protected int projectileSpeed;
     protected final GameSheet gameSheetType;
+    private int lastDir;
     public Character(PointF pos, GameSheet gameSheetType) {
         super(pos, GameConstants.Sprite.SIZE,GameConstants.Sprite.SIZE );
         this.gameSheetType = gameSheetType;
@@ -64,4 +65,8 @@ public abstract class Character extends Entity{
         return gameSheetType;
     }
 
+
+    public int getLastDir() {
+    return lastDir;
+    }
 }
