@@ -88,6 +88,8 @@ public class Playing extends BaseState implements GameStateInterface {
     public static int SPEEDSKELETON = 300;
     public static int SPEEDREPIL = 400;
 
+    private int score = 0;
+
 
     public Playing(Game game) {
         super(game);
@@ -191,6 +193,7 @@ public class Playing extends BaseState implements GameStateInterface {
                         {
                             Argent++;
                             skel.setActive(false);
+                            score++;
                         }
                     }
                 }
@@ -200,6 +203,7 @@ public class Playing extends BaseState implements GameStateInterface {
                         addEnemy(SKELLETON, rept.getHitbox().left, rept.getHitbox().top);
                         Argent++;
                         rept.setActive(false);
+                        score++;
                     }
                 }
             }
@@ -213,6 +217,7 @@ public class Playing extends BaseState implements GameStateInterface {
                             skel.setActive(false);
                             Argent++;
                             s.projectileActive = false;
+                            score++;
                         }
                     }
                 }
@@ -227,6 +232,7 @@ public class Playing extends BaseState implements GameStateInterface {
                         rept.setActive(false);
                         Argent++;
                         s.projectileActive = false;
+                        score++;
                     }
                 }
             }
@@ -239,6 +245,7 @@ public class Playing extends BaseState implements GameStateInterface {
                         if (skel.invincibilityFrame <= 0) {
                             skel.setActive(false);
                             Argent++;
+                            score++;
                         }
 
                     }
@@ -254,6 +261,7 @@ public class Playing extends BaseState implements GameStateInterface {
                         spawnSkeleton(rept.getHitbox().left, rept.getHitbox().top,currentWaypointIndex);
                         rept.setActive(false);
                         Argent++;
+                        score++;
                     }
                 }
             }
@@ -492,8 +500,6 @@ public class Playing extends BaseState implements GameStateInterface {
                     s.hurtbox.left,
                     s.hurtbox.top,
                     null);
-            Log.d("hurtboxDraw", "hurtbox après dessin " + s.hurtbox);
-            c.drawRect(s.hurtbox, redPaint);
         }
     }
     public void drawIceSpike(Canvas c,EskimoNinja e)
@@ -503,8 +509,6 @@ public class Playing extends BaseState implements GameStateInterface {
                     e.hurtbox.left,
                     e.hurtbox.top,
                     null);
-            Log.d("hurtboxDraw eskimo", "hurtbox après dessin " + e.hurtbox);
-            c.drawRect(e.hurtbox, redPaint);
         }
     }
     private void drawUI(Canvas c) {
@@ -542,21 +546,18 @@ public class Playing extends BaseState implements GameStateInterface {
 
                 //region Selection eskimo
                 if (x >= buttonX && x <= buttonX + newWidth && y >= buttonY && y <= buttonY + newHeight) {
-                    Log.v("if marche", "TouchEvent : ca marche eskimo");
                     eskimo_selected = true;
                     return true;
                 }
                 //endregion
                 //region Selection spirit
                 if (x >= buttonX2 && x <= buttonX2 + newWidth && y >= buttonY2 && y <= buttonY2 + newHeight) {
-                    Log.v("if marche", "TouchEvent : ca marche spirit ");
                     spirit_selected = true;
                     return true;
                 }
                 //endregion
                 //region Selection knight
                 if (x >= buttonX3 && x <= buttonX3 + newWidth && y >= buttonY3 && y <= buttonY3 + newHeight) {
-                    Log.v("if marche", "TouchEvent : ca marche knight");
                     knight_selected = true;
                     return true;
                 }
@@ -569,9 +570,6 @@ public class Playing extends BaseState implements GameStateInterface {
                 break;
 
             case MotionEvent.ACTION_UP:
-
-
-
 
                 // Vérifier si le clic est à l'intérieur des coordonnées de l'image
                 if (eskimo_selected) {
@@ -609,7 +607,6 @@ public class Playing extends BaseState implements GameStateInterface {
 
     public void drawCharacter(Canvas canvas, Character c){
         canvas.drawBitmap(c.getGameSheetType().getSprite(c.getFaceDir(),c.getAniIndex()), c.getHitbox().left,c.getHitbox().top,null);
-        canvas.drawRect(c.getHitbox().left,c.getHitbox().top,c.getHitbox().right,c.getHitbox().bottom,redPaint);
 
         if(c instanceof Knight){
 
@@ -667,9 +664,12 @@ public class Playing extends BaseState implements GameStateInterface {
 
     }
     //endregion
-
+    public int getScore() {
+        return score;
+    }
     private void goToGameOverPage() {
         Intent intent = new Intent(MainActivity.getGameContext(), GameOver.class);
+        intent.putExtra("SCORE", getScore());
         startActivity(MainActivity.getGameContext(), intent, null);
     }
 
