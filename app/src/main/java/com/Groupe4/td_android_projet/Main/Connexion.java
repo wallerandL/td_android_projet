@@ -80,18 +80,20 @@ public class Connexion extends AppCompatActivity {
         });
     }
 
-    public void onApiReponse(JSONObject reponse) {
-        Boolean success = null;
-        String error = "";
-
+    public void onApiReponse(JSONObject response) {
         try {
-            success = reponse.getBoolean("success");
+            boolean success = response.getBoolean("success");
 
             if (success) {
+                // Stockez le nom d'utilisateur dans une variable globale ou utilisez un gestionnaire de session
+                MyApp.setUsername(username);
+
+                // Continuez avec le reste de votre logique
                 Intent intent = new Intent(Connexion.this, MainActivity.class);
                 startActivity(intent);
+                finish(); // Finissez cette activité
             } else {
-                error = reponse.getString("error");
+                String error = response.getString("error");
                 errorConnect.setVisibility(View.VISIBLE);
                 errorConnect.setText(error);
             }
@@ -100,6 +102,8 @@ public class Connexion extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
         }
     }
+
+
 
     public void connectUser() {
         String url = "http://10.0.2.2/projetAndroid/action/connexion.php";
