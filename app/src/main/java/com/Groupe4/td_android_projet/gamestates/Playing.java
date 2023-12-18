@@ -1,5 +1,8 @@
 package com.Groupe4.td_android_projet.gamestates;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -7,6 +10,7 @@ import static com.Groupe4.td_android_projet.helpers.GameConstants.Animation.TILE
 import static com.Groupe4.td_android_projet.helpers.GameConstants.Enemies.REPTIL;
 import static com.Groupe4.td_android_projet.helpers.GameConstants.Enemies.SKELLETON;
 import static com.Groupe4.td_android_projet.helpers.GameConstants.Face_Dir.LEFT;
+
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -18,6 +22,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
+import com.Groupe4.td_android_projet.Main.GameOver;
 import com.Groupe4.td_android_projet.Main.MainActivity;
 import com.Groupe4.td_android_projet.R;
 import com.Groupe4.td_android_projet.UI.ButtonImages;
@@ -40,6 +45,7 @@ import com.Groupe4.td_android_projet.helpers.interfaces.GameStateInterface;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
+
 
 
 public class Playing extends BaseState implements GameStateInterface {
@@ -95,6 +101,11 @@ public class Playing extends BaseState implements GameStateInterface {
 
     @Override
     public void update(double delta) {
+        if (PV <= 0) {
+            // Le nombre de vies est épuisé, passer à la page "Game Over"
+            goToGameOverPage();
+            return;
+        }
         updateWaveManager();
         if(isTimeForNewEnemy()){
             spawnEnemy();
@@ -479,4 +490,8 @@ public class Playing extends BaseState implements GameStateInterface {
     }
     //endregion
 
+    private void goToGameOverPage() {
+        Intent intent = new Intent(MainActivity.getGameContext(), GameOver.class);
+        startActivity(MainActivity.getGameContext(), intent, null);
+    }
 }
