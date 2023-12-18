@@ -16,12 +16,32 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Td_android_projet"
         tools:targetApi="31">
-        <activity
-            android:name=".Main.Connexion"
-            android:exported="false"/>
+
+
         <activity
             android:name=".Main.Inscription"
             android:exported="false" />
+
+        <activity
+            android:name=".Main.Connexion"
+            android:exported="true">
+            <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".Main.GameOver"
+            android:label="Game Over"
+            android:screenOrientation="landscape"
+            android:exported="true">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
+
         <activity
 
             android:name=".Main.MainActivity"

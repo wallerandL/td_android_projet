@@ -101,11 +101,16 @@ public class Playing extends BaseState implements GameStateInterface {
 
     @Override
     public void update(double delta) {
+
+
         if (PV <= 0) {
             // Le nombre de vies est épuisé, passer à la page "Game Over"
             goToGameOverPage();
             return;
         }
+
+
+
         updateWaveManager();
         if(isTimeForNewEnemy()){
             spawnEnemy();
@@ -480,6 +485,7 @@ public class Playing extends BaseState implements GameStateInterface {
 
     }
 
+
     public void spawnSpirit(float localx, float localy) {
         synchronized (spirits) {
             spirits.add(new Spirit(new PointF(localx,localy)));
@@ -488,10 +494,12 @@ public class Playing extends BaseState implements GameStateInterface {
         }
 
     }
+
     //endregion
 
     private void goToGameOverPage() {
         Intent intent = new Intent(MainActivity.getGameContext(), GameOver.class);
         startActivity(MainActivity.getGameContext(), intent, null);
     }
+
 }
