@@ -28,4 +28,10 @@ public class GameConstants {
         public static final int REPTIL = 1;
 
     }
+    public static final class PrixTour{
+        public static final int PRIXESKIMONIJA = 50;
+        public static final int PRIXKNIGHT = 15;
+        public static final int PRIXSPIRIT = 10;
+
+    }
 }

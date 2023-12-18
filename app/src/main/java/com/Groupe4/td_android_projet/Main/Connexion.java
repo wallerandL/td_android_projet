@@ -54,10 +54,10 @@ public class Connexion extends AppCompatActivity {
 
         errorConnect = findViewById(R.id.textViewError);
 
-        this.login = findViewById(R.id.editTextTextPersonName2);
-        this.passwordEdit = findViewById(R.id.editTextTextPassword3);
-        this.connexion = findViewById(R.id.button2);
-        this.inscription = findViewById(R.id.button4);
+        login = findViewById(R.id.editTextTextPersonName2);
+        passwordEdit = findViewById(R.id.editTextTextPassword3);
+        connexion = findViewById(R.id.button2);
+        inscription = findViewById(R.id.button4);
 
         databaseManager = new DatabaseManager(getApplicationContext());
 
