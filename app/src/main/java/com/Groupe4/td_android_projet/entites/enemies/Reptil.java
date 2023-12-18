@@ -10,6 +10,7 @@ import com.Groupe4.td_android_projet.entites.GameSheet;
 import com.Groupe4.td_android_projet.environement.Cell;
 import com.Groupe4.td_android_projet.helpers.GameConstants;
 //import static com.Groupe4.td_android_projet.environement.pathfinding.TowerDefensePathfinding.findPath;
+import static com.Groupe4.td_android_projet.gamestates.Playing.SPEEDREPIL;
 import static com.Groupe4.td_android_projet.helpers.GameConstants.Animation.TILE;
 import static com.Groupe4.td_android_projet.helpers.GameConstants.Animation.TILEHAUT;
 import static com.Groupe4.td_android_projet.helpers.GameConstants.Face_Dir.RIGHT;
@@ -114,29 +115,29 @@ public class Reptil extends Character {
         System.out.println("faeDir "+faceDir);
         switch (faceDir){
             case GameConstants.Face_Dir.DOWN:
-                hitbox.top += delta * 400;
-                hitbox.bottom += delta * 400;
+                hitbox.top += delta * SPEEDREPIL;
+                hitbox.bottom += delta * SPEEDREPIL;
 //                if (hitbox.top >= GAME_HEIGHT)
 //                    faceDir = GameConstants.Face_Dir.UP;
                 break;
 
             case GameConstants.Face_Dir.UP:
-                hitbox.top -= delta * 400;
-                hitbox.bottom -= delta * 400;
+                hitbox.top -= delta * SPEEDREPIL;
+                hitbox.bottom -= delta * SPEEDREPIL;
 //                if (hitbox.top <= 0)
 //                    faceDir = GameConstants.Face_Dir.DOWN;
                 break;
 
             case RIGHT:
-                hitbox.left += delta * 400;
-                hitbox.right += delta * 400;
+                hitbox.left += delta * SPEEDREPIL;
+                hitbox.right += delta * SPEEDREPIL;
 //                if (hitbox.left >= GAME_WIDTH)
 //                    faceDir = GameConstants.Face_Dir.LEFT;
                 break;
 
             case GameConstants.Face_Dir.LEFT:
-                hitbox.left -= delta * 400;
-                hitbox.right -= delta * 400;
+                hitbox.left -= delta * SPEEDREPIL;
+                hitbox.right -= delta * SPEEDREPIL;
 //                if (hitbox.left <= 0)
 //                    faceDir = RIGHT;
                 break;

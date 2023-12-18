@@ -14,6 +14,7 @@ import com.Groupe4.td_android_projet.helpers.GameConstants;
 import static com.Groupe4.td_android_projet.Main.MainActivity.GAME_HEIGHT;
 import static com.Groupe4.td_android_projet.Main.MainActivity.GAME_WIDTH;
 //import static com.Groupe4.td_android_projet.environement.pathfinding.TowerDefensePathfinding.findPath;
+import static com.Groupe4.td_android_projet.gamestates.Playing.SPEEDSKELETON;
 import static com.Groupe4.td_android_projet.helpers.GameConstants.Animation.TILE;
 import static com.Groupe4.td_android_projet.helpers.GameConstants.Animation.TILEHAUT;
 import static com.Groupe4.td_android_projet.helpers.GameConstants.Face_Dir.RIGHT;
@@ -119,29 +120,29 @@ public class Skeleton extends Character {
         System.out.println("faeDir "+faceDir);
         switch (faceDir){
             case GameConstants.Face_Dir.DOWN:
-                hitbox.top += delta * 300;
-                hitbox.bottom += delta * 300;
+                hitbox.top += delta * SPEEDSKELETON;
+                hitbox.bottom += delta * SPEEDSKELETON;
 //                if (hitbox.top >= GAME_HEIGHT)
 //                    faceDir = GameConstants.Face_Dir.UP;
                 break;
 
             case GameConstants.Face_Dir.UP:
-                hitbox.top -= delta * 300;
-                hitbox.bottom -= delta * 300;
+                hitbox.top -= delta * SPEEDSKELETON;
+                hitbox.bottom -= delta * SPEEDSKELETON;
 //                if (hitbox.top <= 0)
 //                    faceDir = GameConstants.Face_Dir.DOWN;
                 break;
 
             case RIGHT:
-                hitbox.left += delta * 300;
-                hitbox.right += delta * 300;
+                hitbox.left += delta * SPEEDSKELETON;
+                hitbox.right += delta * SPEEDSKELETON;
 //                if (hitbox.left >= GAME_WIDTH)
 //                    faceDir = GameConstants.Face_Dir.LEFT;
                 break;
 
             case GameConstants.Face_Dir.LEFT:
-                hitbox.left -= delta * 300;
-                hitbox.right -= delta * 300;
+                hitbox.left -= delta * SPEEDSKELETON;
+                hitbox.right -= delta * SPEEDSKELETON;
 //                if (hitbox.left <= 0)
 //                    faceDir = RIGHT;
                 break;

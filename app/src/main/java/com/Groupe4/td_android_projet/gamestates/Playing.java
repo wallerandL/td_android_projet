@@ -84,6 +84,11 @@ public class Playing extends BaseState implements GameStateInterface {
     private RectF attackBox;
     public static int PV=10;
     public static int Argent=10;
+
+    public static int SPEEDSKELETON = 300;
+    public static int SPEEDREPIL = 400;
+
+
     public Playing(Game game) {
         super(game);
 
@@ -343,8 +348,8 @@ public class Playing extends BaseState implements GameStateInterface {
         textPaint.setTextSize(60);  // Taille du texte
         textPaint.setTextAlign(Paint.Align.CENTER);  // Alignement du texte
         String TextArgent = Argent+"\uD83D\uDCB0";
-        float xArgentText = (stripeLeft + stripeRight) / 2;;
-        float yArgentText = 850;
+        float xArgentText = 100;
+        float yArgentText = 120;
         textPaint.setTypeface(typeface);
         c.drawText(TextArgent, xArgentText, yArgentText, textPaint);
         //endregion
