@@ -21,6 +21,7 @@ import android.graphics.Typeface;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
+import android.widget.Toast;
 
 import com.Groupe4.td_android_projet.Main.GameOver;
 import com.Groupe4.td_android_projet.Main.MainActivity;
@@ -41,6 +42,7 @@ import com.Groupe4.td_android_projet.environement.MapManager;
 import com.Groupe4.td_android_projet.Main.Game;
 import com.Groupe4.td_android_projet.helpers.GameConstants;
 import com.Groupe4.td_android_projet.helpers.interfaces.GameStateInterface;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -81,6 +83,7 @@ public class Playing extends BaseState implements GameStateInterface {
     private final WaveManager waveManager;
     private RectF attackBox;
     public static int PV=10;
+    public static int Argent=10;
     public Playing(Game game) {
         super(game);
 
@@ -167,8 +170,11 @@ public class Playing extends BaseState implements GameStateInterface {
                     {
                         if(skel.invincibilityFrame != 0)
                             skel.invincibilityFrame--;
-                        else
+                        else {
                             skel.setActive(false);
+                            Argent+=1;
+                        }
+
                     }
                 }
 
@@ -181,6 +187,7 @@ public class Playing extends BaseState implements GameStateInterface {
                         Log.v("getcurrentwaypoint",""+rept.getCurrentWaypointIndex());
                         spawnSkeleton(rept.getHitbox().left, rept.getHitbox().top,currentWaypointIndex);
                         rept.setActive(false);
+                        Argent+=2;
                     }
                 }
             }
@@ -199,11 +206,6 @@ public class Playing extends BaseState implements GameStateInterface {
             return true;
         }
         return false;
-    }
-
-    public void kill(){
-        skeletons.clear();
-        reptils.clear();
     }
 
     //region vagues
@@ -318,24 +320,56 @@ public class Playing extends BaseState implements GameStateInterface {
                 buttonX3, buttonY3, yellowPaint);
         //endregion
         Bitmap start = BitmapFactory.decodeResource(MainActivity.getGameContext().getResources(), R.drawable.start);
-        c.drawBitmap(Bitmap.createScaledBitmap(start, 100, 100, false),
-                0, 830, yellowPaint);
+        c.drawBitmap(Bitmap.createScaledBitmap(start, 100, 100, false), 0, 830, yellowPaint);
         drawUI(c);
         Bitmap end = BitmapFactory.decodeResource(MainActivity.getGameContext().getResources(), R.drawable.end);
         c.drawBitmap(Bitmap.createScaledBitmap(end, 100, 100, false), 1620, 10, yellowPaint);
 
+        //region affichage PV
         Paint textPaint = new Paint();
         textPaint.setColor(Color.BLACK);
         textPaint.setTextSize(60);  // Taille du texte
         textPaint.setTextAlign(Paint.Align.CENTER);  // Alignement du texte
-        String textToDisplay = PV+"\u2764";
-        float xText = 100;  // Centré horizontalement
-        float yText = 55;  // Centré verticalement
-        Typeface typeface = Typeface.create("Sans", Typeface.BOLD); // Remplacez "NomDeLaPolice" par le nom de votre police
+        String TextPV = PV+"\u2764";
+        float xPVText = 100;
+        float yPVText = 55;
+        Typeface typeface = Typeface.create("Sans", Typeface.BOLD);
         textPaint.setTypeface(typeface);
+        c.drawText(TextPV, xPVText, yPVText, textPaint);
+        //endregion
 
-        c.drawText(textToDisplay, xText, yText, textPaint);
+        //region affichage argent
+        textPaint.setColor(Color.BLACK);
+        textPaint.setTextSize(60);  // Taille du texte
+        textPaint.setTextAlign(Paint.Align.CENTER);  // Alignement du texte
+        String TextArgent = Argent+"\uD83D\uDCB0";
+        float xArgentText = (stripeLeft + stripeRight) / 2;;
+        float yArgentText = 850;
+        textPaint.setTypeface(typeface);
+        c.drawText(TextArgent, xArgentText, yArgentText, textPaint);
+        //endregion
 
+        //region affichage cout tour
+        String coutEskimo = "3 \uD83D\uDCB0";
+        float xPrixEskimo = (stripeLeft + stripeRight) / 2;;
+        float yPrixEskimo = 205;
+        textPaint.setTypeface(typeface);
+        c.drawText(coutEskimo, xPrixEskimo, yPrixEskimo, textPaint);
+
+        String coutKnight = "5 \uD83D\uDCB0";
+        float xPrixKnight = (stripeLeft + stripeRight) / 2;;
+        float yPrixKnight = 605;
+
+        textPaint.setTypeface(typeface);
+        c.drawText(coutKnight, xPrixKnight, yPrixKnight, textPaint);
+
+        String coutSpirit = "10 \uD83D\uDCB0";
+        float xPrixSpirit = (stripeLeft + stripeRight) / 2;;
+        float yPrixSpirit = 405;
+
+        textPaint.setTypeface(typeface);
+        c.drawText(coutSpirit, xPrixSpirit, yPrixSpirit, textPaint);
+        //endregion
 
         drawUI(c);
         }
@@ -406,15 +440,24 @@ public class Playing extends BaseState implements GameStateInterface {
 
                 // Vérifier si le clic est à l'intérieur des coordonnées de l'image
                 if (eskimo_selected) {
-                    spawnEskimo(x, y);
+                    if(Argent>=3) {
+                        spawnEskimo(x, y);
+                        Argent-=3;
+                    }
                     eskimo_selected = false;
                 }
                 if (knight_selected) {
-                    spawnKnight(x, y);
+                    if(Argent>=5) {
+                        spawnKnight(x, y);
+                        Argent-=5;
+                    }
                     knight_selected = false;
                 }
                 if (spirit_selected) {
-                    spawnSpirit(x, y);
+                    if(Argent>=10) {
+                        spawnSpirit(x, y);
+                        Argent-=10;
+                    }
                     spirit_selected = false;
                 }
 
