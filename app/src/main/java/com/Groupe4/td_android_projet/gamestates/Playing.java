@@ -10,6 +10,9 @@ import static com.Groupe4.td_android_projet.helpers.GameConstants.Animation.TILE
 import static com.Groupe4.td_android_projet.helpers.GameConstants.Enemies.REPTIL;
 import static com.Groupe4.td_android_projet.helpers.GameConstants.Enemies.SKELLETON;
 import static com.Groupe4.td_android_projet.helpers.GameConstants.Face_Dir.LEFT;
+import static com.Groupe4.td_android_projet.helpers.GameConstants.PrixTour.PRIXESKIMONIJA;
+import static com.Groupe4.td_android_projet.helpers.GameConstants.PrixTour.PRIXKNIGHT;
+import static com.Groupe4.td_android_projet.helpers.GameConstants.PrixTour.PRIXSPIRIT;
 
 
 import android.graphics.Canvas;
@@ -81,8 +84,7 @@ public class Playing extends BaseState implements GameStateInterface {
     private RectF attackBox;
 
     public static int PV=10;
-    public static int Argent=10;
-
+    public static int Argent=25;
     public static int SPEEDSKELETON = 300;
     public static int SPEEDREPIL = 400;
 
@@ -462,20 +464,20 @@ public class Playing extends BaseState implements GameStateInterface {
         //endregion
 
         //region affichage cout tour
-        String coutEskimo = "3 \uD83D\uDCB0";
+        String coutEskimo = PRIXESKIMONIJA+" \uD83D\uDCB0";
         float xPrixEskimo = (stripeLeft + stripeRight) / 2;;
         float yPrixEskimo = 205;
         textPaint.setTypeface(typeface);
         c.drawText(coutEskimo, xPrixEskimo, yPrixEskimo, textPaint);
 
-        String coutKnight = "5 \uD83D\uDCB0";
+        String coutKnight = PRIXKNIGHT+"\uD83D\uDCB0";
         float xPrixKnight = (stripeLeft + stripeRight) / 2;;
         float yPrixKnight = 605;
 
         textPaint.setTypeface(typeface);
         c.drawText(coutKnight, xPrixKnight, yPrixKnight, textPaint);
 
-        String coutSpirit = "10 \uD83D\uDCB0";
+        String coutSpirit = PRIXSPIRIT+" \uD83D\uDCB0";
         float xPrixSpirit = (stripeLeft + stripeRight) / 2;;
         float yPrixSpirit = 405;
 
@@ -582,23 +584,23 @@ public class Playing extends BaseState implements GameStateInterface {
 
                 // Vérifier si le clic est à l'intérieur des coordonnées de l'image
                 if (eskimo_selected) {
-                    if(Argent>=3) {
+                    if(Argent>=PRIXESKIMONIJA) {
                         spawnEskimo(x, y);
-                        Argent-=3;
+                        Argent-=PRIXESKIMONIJA;
                     }
                     eskimo_selected = false;
                 }
                 if (knight_selected) {
-                    if(Argent>=5) {
+                    if(Argent>=PRIXKNIGHT) {
                         spawnKnight(x, y);
-                        Argent-=5;
+                        Argent-=PRIXKNIGHT;
                     }
                     knight_selected = false;
                 }
                 if (spirit_selected) {
-                    if(Argent>=10) {
+                    if(Argent>=PRIXSPIRIT) {
                         spawnSpirit(x, y);
-                        Argent-=10;
+                        Argent-=PRIXSPIRIT;
                     }
                     spirit_selected = false;
                 }

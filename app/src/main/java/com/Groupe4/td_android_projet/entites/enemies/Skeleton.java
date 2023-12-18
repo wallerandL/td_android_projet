@@ -35,6 +35,7 @@ public class Skeleton extends Character {
     private int currentWaypointIndex=0;
     private int[] faceDir2= {3,1,3,1};
     int facDireX;
+    int wait=0;
 
 
     public Skeleton(PointF pos,int currentWaypointIndex) {
@@ -59,10 +60,8 @@ public class Skeleton extends Character {
     private int currentPathIndex = 0;
 
     public void update(double delta){
-
         updateMove(delta);
         updateAnimation();
-        //exampleUsage();
 
     }
     private void initializeGrid() {
