@@ -684,9 +684,12 @@ public class Playing extends BaseState implements GameStateInterface {
 
     }
     //endregion
-
+    public int getScore() {
+        return score;
+    }
     private void goToGameOverPage() {
         Intent intent = new Intent(MainActivity.getGameContext(), GameOver.class);
+        intent.putExtra("SCORE", getScore());
         startActivity(MainActivity.getGameContext(), intent, null);
     }
 
