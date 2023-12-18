@@ -509,8 +509,6 @@ public class Playing extends BaseState implements GameStateInterface {
                     s.hurtbox.left,
                     s.hurtbox.top,
                     null);
-            Log.d("hurtboxDraw", "hurtbox après dessin " + s.hurtbox);
-            c.drawRect(s.hurtbox, redPaint);
         }
     }
     public void drawIceSpike(Canvas c,EskimoNinja e)
@@ -520,8 +518,6 @@ public class Playing extends BaseState implements GameStateInterface {
                     e.hurtbox.left,
                     e.hurtbox.top,
                     null);
-            Log.d("hurtboxDraw eskimo", "hurtbox après dessin " + e.hurtbox);
-            c.drawRect(e.hurtbox, redPaint);
         }
     }
     private void drawUI(Canvas c) {
@@ -559,21 +555,18 @@ public class Playing extends BaseState implements GameStateInterface {
 
                 //region Selection eskimo
                 if (x >= buttonX && x <= buttonX + newWidth && y >= buttonY && y <= buttonY + newHeight) {
-                    Log.v("if marche", "TouchEvent : ca marche eskimo");
                     eskimo_selected = true;
                     return true;
                 }
                 //endregion
                 //region Selection spirit
                 if (x >= buttonX2 && x <= buttonX2 + newWidth && y >= buttonY2 && y <= buttonY2 + newHeight) {
-                    Log.v("if marche", "TouchEvent : ca marche spirit ");
                     spirit_selected = true;
                     return true;
                 }
                 //endregion
                 //region Selection knight
                 if (x >= buttonX3 && x <= buttonX3 + newWidth && y >= buttonY3 && y <= buttonY3 + newHeight) {
-                    Log.v("if marche", "TouchEvent : ca marche knight");
                     knight_selected = true;
                     return true;
                 }
@@ -586,9 +579,6 @@ public class Playing extends BaseState implements GameStateInterface {
                 break;
 
             case MotionEvent.ACTION_UP:
-
-
-
 
                 // Vérifier si le clic est à l'intérieur des coordonnées de l'image
                 if (eskimo_selected) {
@@ -626,7 +616,6 @@ public class Playing extends BaseState implements GameStateInterface {
 
     public void drawCharacter(Canvas canvas, Character c){
         canvas.drawBitmap(c.getGameSheetType().getSprite(c.getFaceDir(),c.getAniIndex()), c.getHitbox().left,c.getHitbox().top,null);
-        canvas.drawRect(c.getHitbox().left,c.getHitbox().top,c.getHitbox().right,c.getHitbox().bottom,redPaint);
 
         if(c instanceof Knight){
 

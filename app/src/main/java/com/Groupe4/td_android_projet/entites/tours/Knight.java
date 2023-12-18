@@ -46,8 +46,6 @@ public class Knight extends Character {
                     null);
             c.rotate(getWepRot() * -1 , attackBox.left, attackBox.top);
 
-            c.drawRect(attackBox, redPaint);
-
             c.restore(); // restoration du canvas pour remettre les éléments tournés à la bonne rotation
         }
     }
