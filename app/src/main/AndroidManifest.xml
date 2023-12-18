@@ -17,15 +17,16 @@
         android:theme="@style/Theme.Td_android_projet"
         tools:targetApi="31">
         <activity
-            android:name=".Main.MainActivity"
-            android:exported="false"
-            android:screenOrientation="landscape" />
+            android:name=".Main.Connexion"
+            android:exported="false"/>
         <activity
             android:name=".Main.Inscription"
             android:exported="false" />
         <activity
-            android:name=".Main.Connexion"
-            android:exported="true">
+
+            android:name=".Main.MainActivity"
+            android:exported="true"
+            android:screenOrientation="landscape" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
