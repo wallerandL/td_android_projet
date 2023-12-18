@@ -86,6 +86,8 @@ public class Playing extends BaseState implements GameStateInterface {
     public static int SPEEDSKELETON = 300;
     public static int SPEEDREPIL = 400;
 
+    private int score = 0;
+
 
     public Playing(Game game) {
         super(game);
@@ -190,6 +192,7 @@ public class Playing extends BaseState implements GameStateInterface {
                         {
                             Argent++;
                             skel.setActive(false);
+                            score++;
                         }
                     }
                 }
@@ -199,6 +202,7 @@ public class Playing extends BaseState implements GameStateInterface {
                         addEnemy(SKELLETON, rept.getHitbox().left, rept.getHitbox().top);
                         Argent++;
                         rept.setActive(false);
+                        score++;
                     }
                 }
             }
@@ -212,6 +216,7 @@ public class Playing extends BaseState implements GameStateInterface {
                             skel.setActive(false);
                             Argent++;
                             s.projectileActive = false;
+                            score++;
                         }
                     }
                 }
@@ -226,6 +231,7 @@ public class Playing extends BaseState implements GameStateInterface {
                         rept.setActive(false);
                         Argent++;
                         s.projectileActive = false;
+                        score++;
                     }
                 }
             }
@@ -238,6 +244,7 @@ public class Playing extends BaseState implements GameStateInterface {
                         if (skel.invincibilityFrame <= 0) {
                             skel.setActive(false);
                             Argent++;
+                            score++;
                         }
 
                     }
@@ -253,6 +260,7 @@ public class Playing extends BaseState implements GameStateInterface {
                         spawnSkeleton(rept.getHitbox().left, rept.getHitbox().top,currentWaypointIndex);
                         rept.setActive(false);
                         Argent++;
+                        score++;
                     }
                 }
             }
