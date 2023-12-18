@@ -20,12 +20,16 @@ public class GameConstants {
         public static final int SPEED = 10;
         public static final int AMOUNT = 4;
         public static int TILE=160;
-        public static int TILEHAUT=145;
+        public static int TILEHAUT=135;
 
     }
     public static final class Enemies{
         public static final int SKELLETON = 0;
         public static final int REPTIL = 1;
 
+    }
+
+    public static class PointDeVie{
+        public static int PV=10;
     }
 }

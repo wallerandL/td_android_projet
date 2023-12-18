@@ -17,6 +17,7 @@ import static com.Groupe4.td_android_projet.Main.MainActivity.GAME_WIDTH;
 import static com.Groupe4.td_android_projet.helpers.GameConstants.Animation.TILE;
 import static com.Groupe4.td_android_projet.helpers.GameConstants.Animation.TILEHAUT;
 import static com.Groupe4.td_android_projet.helpers.GameConstants.Face_Dir.RIGHT;
+import static com.Groupe4.td_android_projet.helpers.GameConstants.PointDeVie.PV;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,11 +36,12 @@ public class Skeleton extends Character {
     int facDireX;
 
 
-    public Skeleton(PointF pos) {
+    public Skeleton(PointF pos,int currentWaypointIndex) {
         super(pos, GameSheet.SKELETON);
         //faceDir=RIGHT;
         //initializeGrid();
         //updatePath();
+        this.currentWaypointIndex=currentWaypointIndex;
         this.invincibilityFrame = 10;
         waypoints = new ArrayList<>();
 //        waypoints.add(new PointF(5*160,0)); // sur place
@@ -81,12 +83,16 @@ public class Skeleton extends Character {
         if (currentWaypointIndex < waypoints.size()) {
 
             nextWaypoint = waypoints.get(currentWaypointIndex);
-            Log.v("nexwaypoint","nextWaypoint : "+nextWaypoint);
-            Log.v("nexwaypoint","FaceDIreX : "+facDireX);
-            Log.v("nexwaypoint","currentWaypointIndex : "+currentWaypointIndex);
+            Log.v("Snexwaypoint","nextWaypoint : "+nextWaypoint);
+            Log.v("Snexwaypoint","FaceDIreX : "+facDireX);
+            Log.v("Snexwaypoint","currentWaypointIndex : "+currentWaypointIndex);
             moveTowards(nextWaypoint, delta);
             Log.v("ditancebetween","avant");
             if (distanceBetween(hitbox, nextWaypoint) < 160) {
+                if (currentWaypointIndex==3){
+                    setActive(false);
+                    PV-=1;
+                }
                 Log.v("ditancebetween","apres");
                 Log.v("nexwaypointif","currentWaypointIndex : "+currentWaypointIndex);
 //                previousWayPointIndex=currentWaypointIndex;
@@ -105,7 +111,7 @@ public class Skeleton extends Character {
                 currentWaypointIndex++;
             }*/
         }
-//        updateAnimation();
+        updateAnimation();
     }
 
     private void moveTowards(PointF target, double delta) {
@@ -113,29 +119,29 @@ public class Skeleton extends Character {
         System.out.println("faeDir "+faceDir);
         switch (faceDir){
             case GameConstants.Face_Dir.DOWN:
-                hitbox.top += delta * 160;
-                hitbox.bottom += delta * 160;
+                hitbox.top += delta * 300;
+                hitbox.bottom += delta * 300;
 //                if (hitbox.top >= GAME_HEIGHT)
 //                    faceDir = GameConstants.Face_Dir.UP;
                 break;
 
             case GameConstants.Face_Dir.UP:
-                hitbox.top -= delta * 160;
-                hitbox.bottom -= delta * 160;
+                hitbox.top -= delta * 300;
+                hitbox.bottom -= delta * 300;
 //                if (hitbox.top <= 0)
 //                    faceDir = GameConstants.Face_Dir.DOWN;
                 break;
 
             case RIGHT:
-                hitbox.left += delta * 160;
-                hitbox.right += delta * 160;
+                hitbox.left += delta * 300;
+                hitbox.right += delta * 300;
 //                if (hitbox.left >= GAME_WIDTH)
 //                    faceDir = GameConstants.Face_Dir.LEFT;
                 break;
 
             case GameConstants.Face_Dir.LEFT:
-                hitbox.left -= delta * 160;
-                hitbox.right -= delta * 160;
+                hitbox.left -= delta * 300;
+                hitbox.right -= delta * 300;
 //                if (hitbox.left <= 0)
 //                    faceDir = RIGHT;
                 break;

@@ -56,14 +56,11 @@ public class Playing extends BaseState implements GameStateInterface {
 
     private GameLoop gameLoop;
     private final MapManager testMap;
-    private final Skeleton skeleton;
-    private final Reptil reptil;
     float x,y;
-    private final Allies allies;
     private Knight knight;
     private Spirit spirit;
     private EskimoNinja eskimoNinja;
-
+    private int currentWaypointIndex=0;
     private final int decalage_y_selection_tour = 200;
 
 
@@ -88,9 +85,6 @@ public class Playing extends BaseState implements GameStateInterface {
         redPaint.setColor(Color.RED);
         redPaint.setStyle(Paint.Style.STROKE);
         yellowPaint.setColor(Color.rgb(255, 140, 0));
-        skeleton = new Skeleton(new PointF(800,0));
-        reptil = new Reptil(new PointF(800, 0));
-        allies = new Allies(new PointF(500, 500));
         testMap = new MapManager();
         waveManager = new WaveManager(this);
         btnMenu = new CustomButton(2060, 900, ButtonImages.PLAYING_MENU.getWidth(), ButtonImages.PLAYING_MENU.getHeight());
@@ -109,7 +103,6 @@ public class Playing extends BaseState implements GameStateInterface {
         {
             k.updateWebHitbox();
         }
-//        skeleton.update(delta);
         for (Skeleton skeleton : skeletons){
             if(skeleton.isActive()){
                 skeleton.update(delta);
@@ -117,7 +110,6 @@ public class Playing extends BaseState implements GameStateInterface {
             }
 
         }
-        reptil.update(delta);
         for (Reptil reptil : reptils){
             if(reptil.isActive()){
                 reptil.update(delta);
@@ -167,7 +159,9 @@ public class Playing extends BaseState implements GameStateInterface {
                 {
                     if (k.getAttackBox().intersects(rept.getHitbox().left, rept.getHitbox().top, rept.getHitbox().right, rept.getHitbox().bottom))
                     {
-                        addEnemy(SKELLETON, rept.getHitbox().left, rept.getHitbox().top);
+                        currentWaypointIndex=rept.getCurrentWaypointIndex();
+                        Log.v("getcurrentwaypoint",""+rept.getCurrentWaypointIndex());
+                        spawnSkeleton(rept.getHitbox().left, rept.getHitbox().top,currentWaypointIndex);
                         rept.setActive(false);
                     }
                 }
@@ -206,7 +200,8 @@ public class Playing extends BaseState implements GameStateInterface {
         Log.d("Playing", "Adding enemy of type: " + enemyType);
         switch (enemyType) {
             case SKELLETON:
-                spawnSkeleton(x,y);
+                currentWaypointIndex=0;
+                spawnSkeleton(x,y,currentWaypointIndex);
                 break;
             case REPTIL:
                 spawnReptil(0,800);
@@ -304,7 +299,13 @@ public class Playing extends BaseState implements GameStateInterface {
         c.drawBitmap(Bitmap.createScaledBitmap(buttonImage3, newWidth, newHeight, false),
                 buttonX3, buttonY3, yellowPaint);
         //endregion
-
+        Bitmap start = BitmapFactory.decodeResource(MainActivity.getGameContext().getResources(), R.drawable.start);
+        c.drawBitmap(Bitmap.createScaledBitmap(start, 100, 100, false),
+                0, 830, yellowPaint);
+        drawUI(c);
+        Bitmap end = BitmapFactory.decodeResource(MainActivity.getGameContext().getResources(), R.drawable.end);
+        c.drawBitmap(Bitmap.createScaledBitmap(end, 100, 100, false),
+                1620, 10, yellowPaint);
         drawUI(c);
         }
 
@@ -417,9 +418,9 @@ public class Playing extends BaseState implements GameStateInterface {
     }
 
     //region Méthodes spawn
-    public void spawnSkeleton(float spawnX, float spawnY) {
+    public void spawnSkeleton(float spawnX, float spawnY,int currentWaypointIndex) {
         synchronized (skeletons) {
-            skeletons.add(new Skeleton(new PointF(spawnX,spawnY)));
+            skeletons.add(new Skeleton(new PointF(spawnX,spawnY),currentWaypointIndex));
             System.out.println("Spawned skeleton at: (" + spawnX + ", " + spawnY + ")");
 
         }
@@ -462,14 +463,5 @@ public class Playing extends BaseState implements GameStateInterface {
 
     }
     //endregion
-
-
-    public boolean isNextTileRoadSkeleton(Skeleton s) {
-        //enemi pos
-        //enemi dir (facedir)
-        //tile at new possible pos
-
-        return false;
-    }
 
 }
