@@ -30,7 +30,7 @@ public class EskimoNinja extends Character {
         redPaint.setColor(Color.RED);
         redPaint.setStyle(Paint.Style.STROKE);
         this.range = 300;
-        this.projectileSpeed = 30;
+        this.projectileSpeed = 50;
         this.projectilePos = new PointF(this.getHitbox().left, this.getHitbox().top);
         this.hurtbox = new RectF(projectilePos.x, projectilePos.y, projectilePos.x+ Projectiles.ENERGY_BALL.getWidth(),projectilePos.y+Projectiles.ENERGY_BALL.getHeight());
         this.intervalDetection = 0;

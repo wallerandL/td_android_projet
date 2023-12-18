@@ -115,8 +115,6 @@ public class Playing extends BaseState implements GameStateInterface {
             return;
         }
 
-
-
         updateWaveManager();
         if (isTimeForNewEnemy()) {
             spawnEnemy();
@@ -136,7 +134,7 @@ public class Playing extends BaseState implements GameStateInterface {
         for(EskimoNinja e : eskimoNinjas)
         {
             updateIceSpikePosition(e);
-            if(e.intervalDetection < 10)
+            if(e.intervalDetection < 17)
             {
                 e.projectileActive = false;
             }
@@ -188,19 +186,18 @@ public class Playing extends BaseState implements GameStateInterface {
             if (k.getAttackBox() != null) {
                 for (Skeleton skel : skeletons) {
                     if (k.getAttackBox().intersects(skel.getHitbox().left, skel.getHitbox().top, skel.getHitbox().right, skel.getHitbox().bottom)) {
-                        if(skel.invincibilityFrame != 0)
-                            skel.invincibilityFrame--;
-                        else {
+                        if(skel.invincibilityFrame <= 0)
+                        {
+                            Argent++;
                             skel.setActive(false);
-                            Argent+=1;  skel.setActive(false);
                         }
                     }
                 }
 
-
                 for (Reptil rept : reptils) {
                     if (k.getAttackBox().intersects(rept.getHitbox().left, rept.getHitbox().top, rept.getHitbox().right, rept.getHitbox().bottom)) {
                         addEnemy(SKELLETON, rept.getHitbox().left, rept.getHitbox().top);
+                        Argent++;
                         rept.setActive(false);
                     }
                 }
@@ -213,6 +210,7 @@ public class Playing extends BaseState implements GameStateInterface {
                     if (s.hurtbox.intersects(skel.getHitbox().left, skel.getHitbox().top, skel.getHitbox().right, skel.getHitbox().bottom)) {
                         if (skel.invincibilityFrame <= 0) {
                             skel.setActive(false);
+                            Argent++;
                             s.projectileActive = false;
                         }
                     }
@@ -226,7 +224,7 @@ public class Playing extends BaseState implements GameStateInterface {
                     if (s.hurtbox.intersects(rept.getHitbox().left, rept.getHitbox().top, rept.getHitbox().right, rept.getHitbox().bottom)) {
                         addEnemy(SKELLETON, rept.getHitbox().left, rept.getHitbox().top);
                         rept.setActive(false);
-
+                        Argent++;
                         s.projectileActive = false;
                     }
                 }
@@ -239,7 +237,7 @@ public class Playing extends BaseState implements GameStateInterface {
                     if (e.hurtbox.intersects(skel.getHitbox().left, skel.getHitbox().top, skel.getHitbox().right, skel.getHitbox().bottom)) {
                         if (skel.invincibilityFrame <= 0) {
                             skel.setActive(false);
-                            Argent+=1;
+                            Argent++;
                         }
 
                     }
@@ -252,10 +250,9 @@ public class Playing extends BaseState implements GameStateInterface {
                 if (e.hurtbox != null && e.projectileActive) {
                     if (e.hurtbox.intersects(rept.getHitbox().left, rept.getHitbox().top, rept.getHitbox().right, rept.getHitbox().bottom)) {
                         currentWaypointIndex=rept.getCurrentWaypointIndex();
-                        Log.v("getcurrentwaypoint",""+rept.getCurrentWaypointIndex());
                         spawnSkeleton(rept.getHitbox().left, rept.getHitbox().top,currentWaypointIndex);
                         rept.setActive(false);
-                        Argent+=2;
+                        Argent++;
                     }
                 }
             }
