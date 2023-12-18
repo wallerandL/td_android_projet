@@ -106,7 +106,6 @@ public class Playing extends BaseState implements GameStateInterface {
         btnMenu = new CustomButton(2060, 900, ButtonImages.PLAYING_MENU.getWidth(), ButtonImages.PLAYING_MENU.getHeight());
     }
 
-
     @Override
     public void update(double delta) {
 
@@ -316,11 +315,6 @@ public class Playing extends BaseState implements GameStateInterface {
         return false;
     }
 
-    public void kill() {
-        skeletons.clear();
-        reptils.clear();
-    }
-
     //region vagues
     private void updateWaveManager() {
         this.getWaveManager().update();
@@ -331,7 +325,6 @@ public class Playing extends BaseState implements GameStateInterface {
     }
 
     public void addEnemy(int enemyType, float x, float y) {
-        Log.d("Playing", "Adding enemy of type: " + enemyType);
         switch (enemyType) {
             case SKELLETON:
                 currentWaypointIndex=0;
@@ -344,9 +337,7 @@ public class Playing extends BaseState implements GameStateInterface {
     }
 
     private boolean isTimeForNewEnemy() {
-        //Log.d("isTimeForNewEnemy", "Adding enemy of type: ");
         if (this.getWaveManager().isThereMoreEnemiesInWaves() && this.getWaveManager().isTimeForNewEnemyq()) {
-            Log.d("isTimeForNewEnemy3", "Adding enemy of type: ");
             return true;
         }
         return false;

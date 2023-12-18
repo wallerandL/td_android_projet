@@ -64,9 +64,4 @@ public abstract class Character extends Entity{
     public GameSheet getGameSheetType() {
         return gameSheetType;
     }
-
-
-    public int getLastDir() {
-    return lastDir;
-    }
 }

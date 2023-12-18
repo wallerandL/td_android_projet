@@ -1,8 +1,6 @@
 package com.Groupe4.td_android_projet.entites.enemies;
 
 import android.app.Notification;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.Log;
@@ -11,9 +9,6 @@ import com.Groupe4.td_android_projet.entites.Character;
 import com.Groupe4.td_android_projet.entites.GameSheet;
 import com.Groupe4.td_android_projet.environement.Cell;
 import com.Groupe4.td_android_projet.helpers.GameConstants;
-import static com.Groupe4.td_android_projet.Main.MainActivity.GAME_HEIGHT;
-import static com.Groupe4.td_android_projet.Main.MainActivity.GAME_WIDTH;
-//import static com.Groupe4.td_android_projet.environement.pathfinding.TowerDefensePathfinding.findPath;
 import static com.Groupe4.td_android_projet.gamestates.Playing.SPEEDSKELETON;
 import static com.Groupe4.td_android_projet.helpers.GameConstants.Animation.TILE;
 import static com.Groupe4.td_android_projet.helpers.GameConstants.Animation.TILEHAUT;
@@ -25,9 +20,6 @@ import java.util.List;
 import java.util.Random;
 
 public class Skeleton extends Character {
-    public Notification.Builder redPaint;
-    private long lastDirChange = System.currentTimeMillis();
-    private Random rand = new Random();
     PointF nextWaypoint;
     private Cell[][] grid;
     public int invincibilityFrame;
@@ -35,29 +27,21 @@ public class Skeleton extends Character {
     private int currentWaypointIndex=0;
     private int[] faceDir2= {3,1,3,1};
     int facDireX;
-    int wait=0;
 
 
     public Skeleton(PointF pos,int currentWaypointIndex) {
         super(pos, GameSheet.SKELETON);
-        //faceDir=RIGHT;
-        //initializeGrid();
-        //updatePath();
         this.currentWaypointIndex=currentWaypointIndex;
         this.invincibilityFrame = 10;
         waypoints = new ArrayList<>();
-//        waypoints.add(new PointF(5*160,0)); // sur place
 
         waypoints.add(new PointF(6*TILE, 5*TILE)); // Vers la droite
         waypoints.add(new PointF(TILE*6, 1*TILEHAUT)); // Vers le haut
         waypoints.add(new PointF(TILE*12, 1*TILE)); // Vers la droite
         waypoints.add(new PointF(TILE*12, 0*TILE)); // Vers le haut
-        Log.v("nexwaypointif","currentWaypointIndex : "+waypoints);
 
     }
 
-    private List<Cell> path;
-    private int currentPathIndex = 0;
 
     public void update(double delta){
         updateMove(delta);
@@ -78,38 +62,19 @@ public class Skeleton extends Character {
     }
 
     private void updateMove(double delta) {
- //       int previousWayPointIndex=10;
 
         if (currentWaypointIndex < waypoints.size()) {
 
             nextWaypoint = waypoints.get(currentWaypointIndex);
-            Log.v("Snexwaypoint","nextWaypoint : "+nextWaypoint);
-            Log.v("Snexwaypoint","FaceDIreX : "+facDireX);
-            Log.v("Snexwaypoint","currentWaypointIndex : "+currentWaypointIndex);
             moveTowards(nextWaypoint, delta);
-            Log.v("ditancebetween","avant");
             if (distanceBetween(hitbox, nextWaypoint) < 160) {
                 if (currentWaypointIndex==3){
                     setActive(false);
                     PV-=1;
                 }
-                Log.v("ditancebetween","apres");
-                Log.v("nexwaypointif","currentWaypointIndex : "+currentWaypointIndex);
-//                previousWayPointIndex=currentWaypointIndex;
                 currentWaypointIndex++;
                 facDireX++;
-                Log.v("nexwaypointif","currentWaypointIndex : "+currentWaypointIndex);
-//                if (currentWaypointIndex==1)
-//                    facDireX=1;
-//                if (currentWaypointIndex==2)
-//                    facDireX=2;
-//                if (currentWaypointIndex==3)
-//                    facDireX=3;
             }
-/*            if (previousWayPointIndex==currentWaypointIndex) {
-                Log.v("nexwaypoint","previousWayPointIndex : "+currentWaypointIndex);
-                currentWaypointIndex++;
-            }*/
         }
         updateAnimation();
     }
@@ -121,29 +86,21 @@ public class Skeleton extends Character {
             case GameConstants.Face_Dir.DOWN:
                 hitbox.top += delta * SPEEDSKELETON;
                 hitbox.bottom += delta * SPEEDSKELETON;
-//                if (hitbox.top >= GAME_HEIGHT)
-//                    faceDir = GameConstants.Face_Dir.UP;
                 break;
 
             case GameConstants.Face_Dir.UP:
                 hitbox.top -= delta * SPEEDSKELETON;
                 hitbox.bottom -= delta * SPEEDSKELETON;
-//                if (hitbox.top <= 0)
-//                    faceDir = GameConstants.Face_Dir.DOWN;
                 break;
 
             case RIGHT:
                 hitbox.left += delta * SPEEDSKELETON;
                 hitbox.right += delta * SPEEDSKELETON;
-//                if (hitbox.left >= GAME_WIDTH)
-//                    faceDir = GameConstants.Face_Dir.LEFT;
                 break;
 
             case GameConstants.Face_Dir.LEFT:
                 hitbox.left -= delta * SPEEDSKELETON;
                 hitbox.right -= delta * SPEEDSKELETON;
-//                if (hitbox.left <= 0)
-//                    faceDir = RIGHT;
                 break;
         }
     }
@@ -151,7 +108,6 @@ public class Skeleton extends Character {
     public float distanceBetween(RectF point1, PointF point2) {
         float dx = point2.x - point1.right;
         float dy = point2.y - point1.top;
-        Log.v("distanceBetween"," "+dy);
         return (float) Math.sqrt(dx * dx + dy * dy);
     }
     private int determineDirection(PointF target) {
