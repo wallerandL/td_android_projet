@@ -28,8 +28,4 @@ public class GameConstants {
         public static final int REPTIL = 1;
 
     }
-
-    public static class PointDeVie{
-        public static int PV=10;
-    }
 }

@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -73,6 +74,7 @@ public class Playing extends BaseState implements GameStateInterface {
     private final CustomButton btnMenu;
     private final WaveManager waveManager;
     private RectF attackBox;
+    public static int PV=10;
     public Playing(Game game) {
         super(game);
 
@@ -304,8 +306,21 @@ public class Playing extends BaseState implements GameStateInterface {
                 0, 830, yellowPaint);
         drawUI(c);
         Bitmap end = BitmapFactory.decodeResource(MainActivity.getGameContext().getResources(), R.drawable.end);
-        c.drawBitmap(Bitmap.createScaledBitmap(end, 100, 100, false),
-                1620, 10, yellowPaint);
+        c.drawBitmap(Bitmap.createScaledBitmap(end, 100, 100, false), 1620, 10, yellowPaint);
+
+        Paint textPaint = new Paint();
+        textPaint.setColor(Color.BLACK);
+        textPaint.setTextSize(60);  // Taille du texte
+        textPaint.setTextAlign(Paint.Align.CENTER);  // Alignement du texte
+        String textToDisplay = PV+"\u2764";
+        float xText = 100;  // Centré horizontalement
+        float yText = 55;  // Centré verticalement
+        Typeface typeface = Typeface.create("Sans", Typeface.BOLD); // Remplacez "NomDeLaPolice" par le nom de votre police
+        textPaint.setTypeface(typeface);
+
+        c.drawText(textToDisplay, xText, yText, textPaint);
+
+
         drawUI(c);
         }
 

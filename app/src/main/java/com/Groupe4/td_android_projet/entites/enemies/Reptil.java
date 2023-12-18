@@ -13,7 +13,7 @@ import com.Groupe4.td_android_projet.helpers.GameConstants;
 import static com.Groupe4.td_android_projet.helpers.GameConstants.Animation.TILE;
 import static com.Groupe4.td_android_projet.helpers.GameConstants.Animation.TILEHAUT;
 import static com.Groupe4.td_android_projet.helpers.GameConstants.Face_Dir.RIGHT;
-import static com.Groupe4.td_android_projet.helpers.GameConstants.PointDeVie.PV;
+import static com.Groupe4.td_android_projet.gamestates.Playing.PV;
 
 import java.util.ArrayList;
 import java.util.List;
