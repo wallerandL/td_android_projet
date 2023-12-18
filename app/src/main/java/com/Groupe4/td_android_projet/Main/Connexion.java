@@ -3,31 +3,36 @@ package com.Groupe4.td_android_projet.Main;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.Groupe4.td_android_projet.R;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
 
 public class Connexion extends AppCompatActivity {
-    public static Connection conn = null;
-    private EditText login = null;
-    private EditText password = null;
-    private Button connexion = null;
-    private Button inscription = null;
+    private EditText login;
+    private EditText passwordEdit;
+    private Button connexion;
+    private Button inscription;
 
+    private TextView errorConnect;
+    private String username;
+    private String password;
+    private DatabaseManager databaseManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,60 +52,76 @@ public class Connexion extends AppCompatActivity {
                 .penaltyDeath()
                 .build());
 
+        errorConnect = findViewById(R.id.textViewError);
 
-        MysqlConnexion();
+        this.login = findViewById(R.id.editTextTextPersonName2);
+        this.passwordEdit = findViewById(R.id.editTextTextPassword3);
+        this.connexion = findViewById(R.id.button2);
+        this.inscription = findViewById(R.id.button4);
 
-        this.login = (EditText) findViewById(R.id.editTextTextPersonName2);
-        this.password = (EditText) findViewById(R.id.editTextTextPassword3);
-        this.connexion = (Button) findViewById(R.id.button2);
-        this.inscription = (Button) findViewById(R.id.button4);
-
-
+        databaseManager = new DatabaseManager(getApplicationContext());
 
         connexion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String ident = login.getText().toString();
-                String pass = password.getText().toString();
+                username = login.getText().toString();
+                password = passwordEdit.getText().toString();
 
-                if (ident.equals("admin") && pass.equals("admin")) {
-                    Intent intent = new Intent(Connexion.this, MainActivity.class);
-                    startActivity(intent);
-                }
+                connectUser();
             }
         });
 
         inscription.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Connexion.this, MainActivity.class);
+                Intent intent = new Intent(Connexion.this, Inscription.class);
                 startActivity(intent);
             }
         });
     }
 
-    private void MysqlConnexion() {
-        String jdbcURL = "jdbc:mysql://localhost:3306/android";
-        String user = "user";
-        String passwd = "user";
-
+    public void onApiReponse(JSONObject reponse) {
+        Boolean success = null;
+        String error = "";
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(jdbcURL, user, passwd);
-            Toast.makeText(Connexion.this, "Connexion reussi a la base de bonnées.", Toast.LENGTH_LONG).show();
-        } catch (ClassNotFoundException e) {
-            Toast.makeText(Connexion.this, "Driver manquant." + e.getMessage().toString(), Toast.LENGTH_LONG).show();
-            Log.v("marche pas ",""+ e.getMessage());
-        } catch (java.sql.SQLException ex) {
-            Toast.makeText(Connexion.this, "Connexion au serveur impossible." + ex.getMessage().toString(), Toast.LENGTH_LONG).show();
-            Log.v("marche pas sans raison",""+ ex.getMessage());
+            success = reponse.getBoolean("success");
 
-            Log.d("error1", "SQLException: " + ex.getMessage());
-            Log.d("error2", "SQLState: " + ex.getSQLState());
-            Log.d("error3", "VendorError: " + ex.getErrorCode());
+            if (success) {
+                Intent intent = new Intent(Connexion.this, MainActivity.class);
+                startActivity(intent);
+            } else {
+                error = reponse.getString("error");
+                errorConnect.setVisibility(View.VISIBLE);
+                errorConnect.setText(error);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
         }
     }
 
+    public void connectUser() {
+        String url = "http://10.0.2.2/projetAndroid/action/connexion.php";
 
+        Map<String, String> params = new HashMap<>();
+        params.put("username", username);
+        params.put("password", password);
+        JSONObject parameters = new JSONObject(params);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, parameters, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                onApiReponse(response);
+                Toast.makeText(getApplicationContext(), "Opération réussie", Toast.LENGTH_LONG).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        databaseManager.queue.add(jsonObjectRequest);
+    }
 }
